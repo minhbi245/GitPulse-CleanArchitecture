@@ -331,7 +331,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.leonguyen.GitPulse;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.leonguyen.GitPulse$(BUNDLE_ID_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -364,7 +364,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.leonguyen.GitPulse;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.leonguyen.GitPulse$(BUNDLE_ID_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -378,6 +378,8 @@
 		};
 		5601E9F92F87F873002A377F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5601E9CB2F87F870002A377F /* GitPulse */;
+			baseConfigurationReferenceRelativePath = App/Configuration/Prod.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -442,6 +444,8 @@
 		};
 		5601E9FA2F87F873002A377F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5601E9CB2F87F870002A377F /* GitPulse */;
+			baseConfigurationReferenceRelativePath = App/Configuration/Prod.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -583,6 +587,8 @@
 		};
 		5601EA162F88041C002A377F /* Staging Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5601E9CB2F87F870002A377F /* GitPulse */;
+			baseConfigurationReferenceRelativePath = App/Configuration/Staging.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -666,7 +672,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.leonguyen.GitPulse;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.leonguyen.GitPulse$(BUNDLE_ID_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -722,6 +728,8 @@
 		};
 		5601EA1A2F88042A002A377F /* Dev Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5601E9CB2F87F870002A377F /* GitPulse */;
+			baseConfigurationReferenceRelativePath = App/Configuration/Dev.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -805,7 +813,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.leonguyen.GitPulse;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.leonguyen.GitPulse$(BUNDLE_ID_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -861,6 +869,8 @@
 		};
 		5601EA1E2F880438002A377F /* Staging Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5601E9CB2F87F870002A377F /* GitPulse */;
+			baseConfigurationReferenceRelativePath = App/Configuration/Staging.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -937,7 +947,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.leonguyen.GitPulse;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.leonguyen.GitPulse$(BUNDLE_ID_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -993,6 +1003,8 @@
 		};
 		5601EA222F880447002A377F /* Dev Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5601E9CB2F87F870002A377F /* GitPulse */;
+			baseConfigurationReferenceRelativePath = App/Configuration/Dev.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1069,7 +1081,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.leonguyen.GitPulse;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.leonguyen.GitPulse$(BUNDLE_ID_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

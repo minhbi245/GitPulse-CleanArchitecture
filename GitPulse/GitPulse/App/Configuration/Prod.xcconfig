@@ -7,8 +7,8 @@
 //   buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
 //   buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "true")
 
-// App identity
-PRODUCT_BUNDLE_IDENTIFIER = com.leonguyen.GitPulse
+// App identity — no suffix for production
+BUNDLE_ID_SUFFIX =
 APP_DISPLAY_NAME = GitPulse
 
 // API configuration
