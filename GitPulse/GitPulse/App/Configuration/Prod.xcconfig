@@ -1,0 +1,20 @@
+// Prod.xcconfig
+// iOS equivalent of Android productFlavors { create("prod") { ... } }
+// Assigned to: "Debug" and "Release" configurations (default/production)
+//
+// Android:
+//   (no applicationIdSuffix)
+//   buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
+//   buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "true")
+
+// App identity
+PRODUCT_BUNDLE_IDENTIFIER = com.leonguyen.GitPulse
+APP_DISPLAY_NAME = GitPulse
+
+// API configuration
+BASE_URL = https:/$()/api.github.com
+BASE_DOMAIN = api.github.com
+
+// Feature flags
+DB_ENCRYPTION_ENABLED = YES
+ENABLE_LOGGING = NO
