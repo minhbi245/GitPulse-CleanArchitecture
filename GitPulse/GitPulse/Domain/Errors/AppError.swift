@@ -1,3 +1,10 @@
+//
+//  AppError.swift
+//  GitPulse
+//
+//  Created by Leo Nguyen on 10/4/26.
+//
+
 import Foundation
 
 /// Application error types — maps from Android's separate exception classes.

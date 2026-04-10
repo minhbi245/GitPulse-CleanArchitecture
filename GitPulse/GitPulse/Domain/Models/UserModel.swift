@@ -1,3 +1,10 @@
+//
+//  UserModel.swift
+//  GitPulse
+//
+//  Created by Leo Nguyen on 10/4/26.
+//
+
 /// Domain model representing a GitHub user in list view.
 /// Maps from: Android `UserModel.kt` (data class -> struct)
 struct UserModel: Hashable, Identifiable {

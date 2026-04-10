@@ -1,3 +1,10 @@
+//
+//  GetUserPagingUseCase.swift
+//  GitPulse
+//
+//  Created by Leo Nguyen on 10/4/26.
+//
+
 import Combine
 
 /// Use case for fetching paginated user list.

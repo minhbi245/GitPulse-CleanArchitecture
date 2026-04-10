@@ -1,3 +1,10 @@
+//
+//  UserRepositoryProtocol.swift
+//  GitPulse
+//
+//  Created by Leo Nguyen on 10/4/26.
+//
+
 import Combine
 import Foundation
 

@@ -1,3 +1,10 @@
+//
+//  UserDetailsModel.swift
+//  GitPulse
+//
+//  Created by Leo Nguyen on 10/4/26.
+//
+
 /// Domain model for detailed GitHub user info.
 /// Maps from: Android `UserDetailsModel.kt`
 struct UserDetailsModel: Equatable {
