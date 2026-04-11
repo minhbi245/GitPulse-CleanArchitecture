@@ -39,6 +39,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        // Will call CoreDataManager.shared.saveContext() after Phase 04
+        CoreDataManager.shared.saveContext()
     }
 }

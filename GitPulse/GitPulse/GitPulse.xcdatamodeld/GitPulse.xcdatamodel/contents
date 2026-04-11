@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="true" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21429" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="UserEntity" representedClassName="UserEntity" syncable="true">
+        <attribute name="avatarUrl" optional="YES" attributeType="String" defaultValueString="" syncable="true"/>
+        <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES" defaultValueString="0" syncable="true"/>
+        <attribute name="url" optional="YES" attributeType="String" defaultValueString="" syncable="true"/>
+        <attribute name="username" optional="YES" attributeType="String" defaultValueString="" syncable="true"/>
+    </entity>
+    <elements>
+        <element name="UserEntity" positionX="-36" positionY="-80" width="128" height="89"/>
+    </elements>
 </model>
