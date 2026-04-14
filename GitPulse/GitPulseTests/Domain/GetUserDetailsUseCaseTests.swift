@@ -2,8 +2,6 @@
 //  GetUserDetailsUseCaseTests.swift
 //  GitPulseTests
 //
-//  Equivalent to Android `GetUserDetailsUseCaseTest`.
-//
 
 import XCTest
 import Combine

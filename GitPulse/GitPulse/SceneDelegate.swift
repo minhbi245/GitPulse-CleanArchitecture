@@ -7,10 +7,9 @@
 
 import UIKit
 
-/// iOS equivalent of Android's `MainActivity.onCreate() + setContent { MainNavHost() }`.
 /// Builds the window, installs a root `UINavigationController`, and hands off
 /// routing to `AppCoordinator`. Deep links are parsed here and forwarded to
-/// the coordinator — equivalent to Android's `navDeepLink` handling inside `NavHost`.
+/// the coordinator.
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -42,7 +41,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
-    /// Warm deep link — equivalent to Android `Activity.onNewIntent`.
+    /// Warm deep link — app already running, opened via URL.
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let url = URLContexts.first?.url else { return }
         appCoordinator?.handleDeepLink(url: url)

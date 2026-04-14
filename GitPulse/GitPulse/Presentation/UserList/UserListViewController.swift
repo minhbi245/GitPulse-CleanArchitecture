@@ -7,12 +7,12 @@ import Combine
 import SnapKit
 import UIKit
 
-/// User list screen — equivalent to Android `UserListScreen` + `UserListContent` composables.
+/// User list screen backed by a compositional collection view.
 ///
 /// Composition:
-///   - `UICollectionView` + `UICollectionViewCompositionalLayout` ≈ `LazyVerticalGrid`
-///   - `UICollectionViewDiffableDataSource`                       ≈ `items(count, key)`
-///   - `UIRefreshControl`                                         ≈ `PullToRefreshBox`
+///   - `UICollectionView` + `UICollectionViewCompositionalLayout`
+///   - `UICollectionViewDiffableDataSource`
+///   - `UIRefreshControl`
 ///   - `LoadingView` + error alert from `BaseViewModel` bindings
 final class UserListViewController: UIViewController {
 
@@ -251,7 +251,6 @@ extension UserListViewController: UICollectionViewDelegate {
     }
 
     /// Infinite scroll — trigger next page when within two screens of the bottom.
-    /// Equivalent to Paging3 prefetch behavior.
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height

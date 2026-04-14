@@ -2,8 +2,6 @@
 //  UserListViewModelTests.swift
 //  GitPulseTests
 //
-//  Equivalent to Android `UserListViewModelTest`.
-//
 
 import XCTest
 import Combine
@@ -25,7 +23,6 @@ final class UserListViewModelTests: XCTestCase {
     // running. A `@MainActor` class with a sync test method crashes because
     // XCTest invokes it from a background thread without an actor hop.
 
-    /// Equivalent to Android: `setRefreshing updates uiState`.
     func testUpdateState_setRefreshing_updatesState() async {
         let viewModel = makeViewModel()
 
@@ -34,7 +31,6 @@ final class UserListViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.isRefreshing)
     }
 
-    /// Equivalent to Android: `setLoading doesn't propagate while refreshing`.
     func testSetLoading_whenRefreshing_isSuppressed() async {
         let viewModel = makeViewModel()
         viewModel.updateState { var s = $0; s.isRefreshing = true; return s }
@@ -44,7 +40,6 @@ final class UserListViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isLoading)
     }
 
-    /// Equivalent to Android: `setLoading calls super when not refreshing`.
     func testSetLoading_whenNotRefreshing_showsLoading() async {
         let viewModel = makeViewModel()
         viewModel.updateState { var s = $0; s.isRefreshing = false; return s }

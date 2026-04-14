@@ -8,7 +8,6 @@
 import Foundation
 
 /// Service layer for GitHub User API calls.
-/// Maps from: Android `UserService.kt` (Retrofit interface)
 protocol UserServiceProtocol: Sendable {
     func getUsers(perPage: Int, since: Int) async throws -> [UserResponse]
     func getUserDetails(username: String) async throws -> UserDetailsResponse

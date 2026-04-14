@@ -2,8 +2,6 @@
 //  UserDetailsViewModelTests.swift
 //  GitPulseTests
 //
-//  Equivalent to Android `UserDetailsViewModelTest`.
-//
 
 import XCTest
 import Combine
@@ -30,7 +28,6 @@ final class UserDetailsViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    /// Equivalent to Android: `getUserDetails is success`.
     func testInit_withSuccessfulFetch_updatesStateWithFormattedValues() async {
         let expected = UserDetailsModel(
             username: "mojombo",
@@ -67,7 +64,6 @@ final class UserDetailsViewModelTests: XCTestCase {
         await fulfillment(of: [stateExpectation], timeout: 2)
     }
 
-    /// Equivalent to Android: `getUserDetails is failure`.
     func testInit_withFailedFetch_publishesError() async {
         mockRepository.getUserDetailsResult = .failure(AppError.noConnection)
 

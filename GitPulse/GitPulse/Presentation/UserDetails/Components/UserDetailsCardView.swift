@@ -7,14 +7,7 @@ import Kingfisher
 import SnapKit
 import UIKit
 
-/// User card with avatar, username, country — equivalent to Android `UserDetailsCard` composable.
-///
-/// Android layout:
-///   Column(horizontalAlignment = CenterHorizontally) {
-///     UserAvatar(avatarUrl, size = 120.dp)
-///     Text(username, style = titleLarge)
-///     UserCountry(country)
-///   }
+/// User card with avatar, username, and country displayed vertically centered.
 final class UserDetailsCardView: UIView {
 
     private let avatarImageView: UIImageView = {
@@ -22,6 +15,8 @@ final class UserDetailsCardView: UIView {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 60
+        iv.layer.borderWidth = 2
+        iv.layer.borderColor = AppColors.primary.cgColor
         iv.backgroundColor = .systemGray5
         return iv
     }()

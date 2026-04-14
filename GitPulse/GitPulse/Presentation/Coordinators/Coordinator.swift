@@ -7,8 +7,8 @@ import UIKit
 
 /// Base Coordinator protocol — decouples navigation logic from view controllers.
 ///
-/// Mirrors the role of Android's `NavHostController`: owns a nav stack, decides
-/// which screen to show next, and acts as the single source of truth for routing.
+/// Owns a navigation stack, decides which screen to show next, and acts as the
+/// single source of truth for routing.
 protocol Coordinator: AnyObject {
     var navigationController: UINavigationController { get }
     var childCoordinators: [Coordinator] { get set }

@@ -6,10 +6,10 @@
 import Combine
 import Foundation
 
-/// Base ViewModel with state, loading, error, and one-shot events — mirrors Android `UiStateViewModel`.
+/// Base ViewModel with state, loading, error, and one-shot events.
 ///
-/// - `CurrentValueSubject` ≈ `MutableStateFlow` (hot, replays latest)
-/// - `PassthroughSubject` ≈ `Channel` (one-shot events, no replay)
+/// - `CurrentValueSubject` — hot subject that replays the latest value to new subscribers
+/// - `PassthroughSubject` — one-shot events with no replay
 @MainActor
 class BaseViewModel<UiState, Event> {
 
@@ -75,11 +75,11 @@ class BaseViewModel<UiState, Event> {
         eventSubject.send(event)
     }
 
-    /// Async work with optional loading and centralized error handling — mirrors `launchSafe`.
+    /// Async work with optional loading overlay and centralized error handling.
     ///
-    /// The `task` closure may run off the main actor. After `await`ing work, call
-    /// `await MainActor.run { … }` (or an `@MainActor` helper) before mutating this
-    /// view model (`updateState`, `setState`, `sendEvent`, etc.).
+    /// The `task` closure may run off the main actor. Call `await MainActor.run { … }`
+    /// (or an `@MainActor` helper) before mutating this view model
+    /// (`updateState`, `setState`, `sendEvent`, etc.).
     @discardableResult
     func performTask(
         showLoading: Bool = false,

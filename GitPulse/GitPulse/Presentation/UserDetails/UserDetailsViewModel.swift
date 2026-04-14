@@ -7,7 +7,7 @@ import Combine
 import Factory
 import Foundation
 
-/// UI state for user details — equivalent to Android `UserDetailUiState`.
+/// UI state for user details.
 struct UserDetailUiState: Equatable {
     var username: String = ""
     var avatarUrl: String = ""
@@ -24,9 +24,8 @@ enum UserDetailsEvent: Equatable {
 
 /// ViewModel for the user details screen.
 ///
-/// Maps from: Android `UserDetailsViewModel.kt`. Android reads the destination args from
-/// `SavedStateHandle`; iOS receives them via init (from `UserListViewModel.selectUser` →
-/// `UserListEvent.navigateToDetails` routed by the coordinator in Phase 09).
+/// Receives navigation arguments via `init` (from `UserListViewModel.selectUser` →
+/// `UserListEvent.navigateToDetails` routed by the coordinator).
 @MainActor
 final class UserDetailsViewModel: BaseViewModel<UserDetailUiState, UserDetailsEvent> {
 
@@ -55,7 +54,7 @@ final class UserDetailsViewModel: BaseViewModel<UserDetailUiState, UserDetailsEv
         fetchUserDetails()
     }
 
-    /// Factory DI convenience — equivalent to `@HiltViewModel @Inject constructor(...)`.
+    /// Factory DI convenience initializer.
     convenience init(username: String, avatarUrl: String = "", url: String = "") {
         self.init(
             username: username,
@@ -76,7 +75,6 @@ final class UserDetailsViewModel: BaseViewModel<UserDetailUiState, UserDetailsEv
 
     // MARK: - Private
 
-    /// Fetch details — equivalent to `getUserDetailsUseCase(username).collectSafe(hasLoading = true)`.
     private func fetchUserDetails() {
         setLoading(true)
         getUserDetailsUseCase(username: username)

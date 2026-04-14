@@ -6,7 +6,6 @@
 //
 
 /// Domain model representing a GitHub user in list view.
-/// Maps from: Android `UserModel.kt` (data class -> struct)
 nonisolated struct UserModel: Hashable, Identifiable, Sendable {
     let id: Int
     let username: String

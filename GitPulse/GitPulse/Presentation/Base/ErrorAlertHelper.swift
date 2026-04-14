@@ -5,7 +5,7 @@
 
 import UIKit
 
-/// Presents error alerts — equivalent to Android's error dialog composable.
+/// Presents a standard error alert from any view controller.
 enum ErrorAlertHelper {
 
     static func show(

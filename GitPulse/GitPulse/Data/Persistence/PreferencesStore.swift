@@ -8,18 +8,12 @@
 import Foundation
 import KeychainAccess
 
-/// Secure key-value store — equivalent to Android's EncryptedDataStore.
+/// Secure key-value store backed by Keychain.
 ///
-/// Android mapping:
-/// - DataStore<Preferences> -> KeychainAccess.Keychain
-/// - longPreferencesKey("last_updated_user_list") -> String key in Keychain
-/// - dataStore.edit { prefs -> prefs[KEY] = value } -> keychain.set(value, key:)
-/// - dataStore.data.map { prefs -> prefs[KEY] } -> keychain.get(key)
-///
-/// WHY Keychain instead of UserDefaults?
-/// Android uses EncryptedDataStore (encrypted at rest). The iOS equivalent is Keychain,
-/// which is hardware-encrypted and persists across app reinstalls. UserDefaults is like
-/// SharedPreferences (unencrypted, deleted on uninstall).
+/// Keychain is hardware-encrypted and persists across app reinstalls,
+/// making it the appropriate choice for sensitive timestamps and tokens.
+/// `.whenUnlockedThisDeviceOnly` ensures data is accessible only when the
+/// device is unlocked and is never migrated to new devices.
 protocol PreferencesStoreProtocol {
     func setLastUpdatedUserList(_ timestamp: TimeInterval)
     func getLastUpdatedUserList() -> TimeInterval
@@ -30,19 +24,14 @@ final class PreferencesStore: PreferencesStoreProtocol {
     private let keychain: Keychain
 
     private enum Keys {
-        /// Equivalent to: longPreferencesKey("last_updated_user_list")
         static let lastUpdatedUserList = "last_updated_user_list"
     }
 
     init(service: String = "com.gitpulse.preferences") {
-        // `.whenUnlockedThisDeviceOnly` — data only accessible when device is unlocked
-        // AND never migrated to new devices. Equivalent to Android's
-        // EncryptedSharedPreferences + REQUIRE_DEVICE_UNLOCK.
         self.keychain = Keychain(service: service)
             .accessibility(.whenUnlockedThisDeviceOnly)
     }
 
-    /// Store timestamp — equivalent to: dataStore.edit { prefs -> prefs[KEY] = value }
     func setLastUpdatedUserList(_ timestamp: TimeInterval) {
         do {
             try keychain.set(String(timestamp), key: Keys.lastUpdatedUserList)
@@ -51,8 +40,7 @@ final class PreferencesStore: PreferencesStoreProtocol {
         }
     }
 
-    /// Read timestamp — equivalent to: dataStore.data.map { prefs -> prefs[KEY].orZero() }
-    /// Returns 0 if not set (same as Android's .orZero())
+    /// Returns 0 if not yet set.
     func getLastUpdatedUserList() -> TimeInterval {
         guard let value = keychain[Keys.lastUpdatedUserList],
               let timestamp = TimeInterval(value) else {

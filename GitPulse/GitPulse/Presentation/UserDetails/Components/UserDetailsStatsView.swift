@@ -6,10 +6,7 @@
 import SnapKit
 import UIKit
 
-/// Followers/following stats card — equivalent to Android `UserDetailsStats` + `UserStat`.
-///
-/// Android layout:
-///   Card { Row { UserStat(followers, "Follower"), Divider, UserStat(following, "Following") } }
+/// Followers/following stats card with a vertical divider between the two columns.
 final class UserDetailsStatsView: UIView {
 
     private let followersValueLabel = UserDetailsStatsView.makeValueLabel()

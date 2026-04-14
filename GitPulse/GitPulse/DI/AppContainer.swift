@@ -2,25 +2,11 @@
 //  AppContainer.swift
 //  GitPulse
 //
-//  iOS equivalent of Android's Hilt DI modules.
-//
-//  Android Hilt pattern:
-//    @Module @InstallIn(SingletonComponent::class)
-//    class RemoteModule {
-//        @Provides @Singleton
-//        fun provideUserService(retrofit: Retrofit): UserService
-//    }
-//
-//  iOS Factory pattern:
-//    extension Container {
-//        var userService: Factory<UserServiceProtocol> {
-//            self { UserServiceImpl() }.singleton
-//        }
-//    }
+//  Factory DI container root. Registrations are added per phase via extensions
+//  in the Data and Domain layers.
 //
 //  Usage in ViewModel:
-//    Android: @Inject constructor(private val useCase: GetUserPagingUseCase)
-//    iOS:     @Injected(\.getUserPagingUseCase) private var useCase
+//    @Injected(\.getUserPagingUseCase) private var useCase
 //
 
 import Factory

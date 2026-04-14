@@ -8,17 +8,14 @@
 import Combine
 import Foundation
 
-/// Repository implementation — equivalent to Android's UserRepositoryImpl.
-///
-/// Android version delegates pagination to Pager+RemoteMediator.
-/// iOS version delegates to PaginationManager (our custom equivalent).
+/// Repository implementation — coordinates network, cache, and preferences.
 final class UserRepositoryImpl: UserRepositoryProtocol {
 
     private let userService: UserServiceProtocol
     private let localDataSource: UserLocalDataSourceProtocol
     private let preferencesStore: PreferencesStoreProtocol
 
-    /// Lazy PaginationManager — equivalent to RemoteMediator being injected.
+    /// Lazy PaginationManager — created on first access.
     lazy var paginationManager: PaginationManager = {
         PaginationManager(
             userService: userService,
@@ -66,7 +63,6 @@ final class UserRepositoryImpl: UserRepositoryProtocol {
         }.eraseToAnyPublisher()
     }
 
-    /// Equivalent to: override fun getUserDetails(username) = flow { emit(userService.getUserDetails(username).toUserDetailsModel()) }
     func getUserDetails(username: String) -> AnyPublisher<UserDetailsModel, Error> {
         Future<UserDetailsModel, Error> { [weak self] promise in
             Task {

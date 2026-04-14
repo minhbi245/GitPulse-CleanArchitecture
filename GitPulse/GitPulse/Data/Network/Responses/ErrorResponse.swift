@@ -8,7 +8,6 @@
 import Foundation
 
 /// DTO for GitHub API error responses.
-/// Maps from: Android `ErrorResponse.kt`
 struct ErrorResponse: Decodable {
     let message: String?
     let documentationUrl: String?

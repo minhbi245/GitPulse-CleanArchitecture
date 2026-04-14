@@ -7,10 +7,8 @@
 
 import UIKit
 
-/// iOS equivalent of Android's Application class (App.kt with @HiltAndroidApp).
-/// Core Data stack is NOT here — it will live in CoreDataManager (Phase 04),
-/// following the same separation of concerns as Android where Room setup
-/// is in a dedicated DatabaseModule, not the Application class.
+/// Application entry point. Core Data stack lives in `CoreDataManager`,
+/// keeping it separate from app lifecycle concerns.
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

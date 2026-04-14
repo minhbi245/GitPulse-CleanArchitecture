@@ -7,8 +7,7 @@
 
 import Combine
 
-/// Use case for fetching paginated user list.
-/// Maps from: Android `GetUserPagingUseCase.kt`
+/// Use case for fetching a paginated user list.
 final class GetUserPagingUseCase {
 
     private let repository: UserRepositoryProtocol

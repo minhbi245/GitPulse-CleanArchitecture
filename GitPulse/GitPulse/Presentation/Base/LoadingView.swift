@@ -6,7 +6,7 @@
 import SnapKit
 import UIKit
 
-/// Full-screen loading overlay — equivalent to Android's loading composable with fade visibility.
+/// Full-screen loading overlay with a fade-in/out animation.
 final class LoadingView: UIView {
 
     private let activityIndicator: UIActivityIndicatorView = {

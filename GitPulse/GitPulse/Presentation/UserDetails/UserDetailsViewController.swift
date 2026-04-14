@@ -7,9 +7,8 @@ import Combine
 import SnapKit
 import UIKit
 
-/// User details screen — equivalent to Android `UserDetailsScreen` + `UserDetailsContent`.
+/// User details screen with adaptive layout.
 ///
-/// Adaptive layout (mirrors Android's `windowHeightSizeClass == COMPACT` branch):
 /// - Regular height (portrait): card → stats → blog stacked vertically
 /// - Compact height (landscape): card + stats side-by-side, blog below
 final class UserDetailsViewController: UIViewController {
@@ -70,7 +69,7 @@ final class UserDetailsViewController: UIViewController {
         bindViewModel()
     }
 
-    /// Re-layout for rotation — equivalent to Compose re-running on `windowHeightSizeClass` change.
+    /// Re-layout on rotation — verticalSizeClass drives portrait vs landscape arrangement.
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
@@ -102,7 +101,7 @@ final class UserDetailsViewController: UIViewController {
         updateLayoutForTraits()
     }
 
-    /// Adaptive layout — mirrors Android's `isHeightCompact` Row/Column switch.
+    /// Adaptive layout — compact height (landscape) places card + stats side-by-side.
     private func updateLayoutForTraits() {
         [cardView, statsView, blogView].forEach { $0.removeFromSuperview() }
         horizontalStack.arrangedSubviews.forEach { horizontalStack.removeArrangedSubview($0); $0.removeFromSuperview() }

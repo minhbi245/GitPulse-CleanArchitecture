@@ -2,15 +2,14 @@
 //  MockUserRepository.swift
 //  GitPulseTests
 //
-//  Protocol-based mock — replaces Android MockK `mockk<UserRepository>()`.
+//  Protocol-based mock — configure `*Result` before calling the method under test.
+//  Call counts + last-args enable assertion-based verification.
 //
 
 import Combine
 import Foundation
 @testable import GitPulse
 
-/// Configure `*Result` before calling the method under test.
-/// Call counts + last-args mimic MockK `verify { }`.
 final class MockUserRepository: UserRepositoryProtocol {
 
     var getUsersResult: Result<[UserModel], Error> = .success([])

@@ -7,9 +7,10 @@ import Kingfisher
 import SnapKit
 import UIKit
 
-/// Collection view cell for the user list — equivalent to Android `UserCard` composable.
+/// Collection view cell for a single user row.
 ///
-/// Layout: `Card { HStack { Avatar(90), VStack { name, separator, url } } }`.
+/// Layout: card view containing avatar (90pt) on the left, then
+/// username + separator + URL stacked vertically on the right.
 final class UserCell: UICollectionViewCell {
 
     static let reuseIdentifier = "UserCell"
@@ -20,8 +21,8 @@ final class UserCell: UICollectionViewCell {
         let view = UIView()
         view.backgroundColor = .secondarySystemGroupedBackground
         view.layer.cornerRadius = 12
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.1
+        view.layer.shadowColor = AppColors.primary.cgColor
+        view.layer.shadowOpacity = 0.12
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = 4
         return view

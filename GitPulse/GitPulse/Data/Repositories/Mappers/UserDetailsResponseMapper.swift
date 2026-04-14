@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Maps from: Android `UserDetailsMappers.kt`
+/// Maps user details network DTOs to domain models.
 enum UserDetailsResponseMapper {
 
     /// UserDetailsResponse -> UserDetailsModel.

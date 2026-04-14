@@ -2,8 +2,6 @@
 //  UserResponseMapperTests.swift
 //  GitPulseTests
 //
-//  Equivalent to Android `UserMappersKtTest`.
-//
 
 import XCTest
 @testable import GitPulse

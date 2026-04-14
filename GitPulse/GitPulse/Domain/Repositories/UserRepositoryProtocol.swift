@@ -9,10 +9,10 @@ import Combine
 import Foundation
 
 /// Repository protocol for user data operations.
-/// Maps from: Android `UserRepository.kt` (interface -> protocol)
 ///
-/// Note: getUserPaging doesn't return PagingData because iOS has no Paging3.
-/// Instead, the repository exposes methods the ViewModel calls for each page.
+/// Pagination is handled at the repository level via individual page fetches
+/// rather than a streaming paging source, giving the ViewModel explicit control
+/// over when each page loads.
 protocol UserRepositoryProtocol {
 
     /// Fetch a page of users starting after `since` ID.

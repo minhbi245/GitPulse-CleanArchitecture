@@ -5,16 +5,10 @@
 
 import UIKit
 
-/// Root coordinator — equivalent to Android's `MainNavHost`.
+/// Root coordinator — owns the navigation stack and wires screens together.
 ///
-/// Android declares routes up front:
-///   NavHost(startDestination = UserListDestination) {
-///     composable<UserListDestination> { UserListScreen(navController) }
-///     composable<UserDetailsDestination> { UserDetailsScreen(navController) }
-///   }
-///
-/// iOS builds screens on demand (imperative). `start()` installs the user list;
-/// `showUserDetails` pushes the details VC; `handleDeepLink` routes external URLs.
+/// `start()` installs the user list as root; `showUserDetails` pushes the
+/// details VC; `handleDeepLink` routes external URLs.
 @MainActor
 final class AppCoordinator: Coordinator {
 
@@ -27,14 +21,14 @@ final class AppCoordinator: Coordinator {
 
     // MARK: - Start
 
-    /// Equivalent to: `NavHost(startDestination = UserListDestination)`.
     func start() {
+        navigationController.navigationBar.tintColor = AppColors.primary
         showUserList()
     }
 
     // MARK: - Navigation
 
-    /// Install the user list as root — equivalent to `composable<UserListDestination>`.
+    /// Install the user list as the root view controller.
     private func showUserList() {
         let viewModel = UserListViewModel()
         let viewController = UserListViewController(viewModel: viewModel)
@@ -42,7 +36,7 @@ final class AppCoordinator: Coordinator {
         navigationController.setViewControllers([viewController], animated: false)
     }
 
-    /// Push user details — equivalent to `navController.navigate(user.toUserDetailsDestination())`.
+    /// Push user details onto the navigation stack.
     func showUserDetails(username: String, avatarUrl: String, url: String) {
         let viewModel = UserDetailsViewModel(
             username: username,
@@ -57,9 +51,9 @@ final class AppCoordinator: Coordinator {
 
     /// Parse the incoming URL path and route accordingly.
     ///
-    /// Android equivalent:
-    ///   navDeepLink<UserListDestination>(DeepLinks.USER_LIST_PATH)       // gitpulse://users
-    ///   navDeepLink<UserDetailsDestination>(DeepLinks.USER_DETAILS_PATH) // gitpulse://users/{username}
+    /// Supported routes:
+    ///   gitpulse://users         → pop to user list
+    ///   gitpulse://users/{name}  → open user details for {name}
     func handleDeepLink(url: URL) {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return

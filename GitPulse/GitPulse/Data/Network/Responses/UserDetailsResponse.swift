@@ -8,7 +8,6 @@
 import Foundation
 
 /// DTO for GitHub user details API response.
-/// Maps from: Android `UserDetailsResponse.kt`
 struct UserDetailsResponse: Decodable {
     let id: Int?
     let login: String?

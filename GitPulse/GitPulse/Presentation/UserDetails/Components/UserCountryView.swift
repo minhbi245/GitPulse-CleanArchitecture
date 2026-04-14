@@ -6,7 +6,7 @@
 import SnapKit
 import UIKit
 
-/// Country display with location icon — equivalent to Android `UserCountry` composable.
+/// Country display with location icon.
 final class UserCountryView: UIView {
 
     private let iconImageView: UIImageView = {

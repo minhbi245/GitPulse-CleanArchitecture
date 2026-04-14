@@ -7,8 +7,7 @@
 
 import Foundation
 
-/// Maps URLSession responses/errors to domain AppError type.
-/// Maps from: Android `ErrorMappers.kt` + `ErrorHandlingCallback.kt`
+/// Maps URLSession responses and transport errors to domain `AppError` values.
 enum NetworkErrorMapper {
 
     /// Map HTTP response + data to AppError when status code indicates failure.

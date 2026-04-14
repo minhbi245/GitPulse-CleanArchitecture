@@ -7,10 +7,9 @@
 
 import Foundation
 
-/// Type-safe API route definitions — equivalent to Retrofit's annotated interface.
+/// Type-safe API route definitions.
 ///
-/// Retrofit uses annotations (@GET, @POST, @Path, @Query) processed at compile time.
-/// Swift doesn't have annotation processing, so we use enums where each case is a route.
+/// Each case is a distinct endpoint; associated values carry the route parameters.
 enum APIEndpoint {
     case getUsers(perPage: Int, since: Int)
     case getUserDetails(username: String)

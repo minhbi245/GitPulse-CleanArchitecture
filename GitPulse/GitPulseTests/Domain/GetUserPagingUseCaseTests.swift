@@ -2,8 +2,6 @@
 //  GetUserPagingUseCaseTests.swift
 //  GitPulseTests
 //
-//  Equivalent to Android `GetUserPagingUseCaseTest`.
-//
 
 import XCTest
 import Combine

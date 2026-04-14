@@ -7,33 +7,25 @@
 
 import CoreData
 
-/// Manages the Core Data stack — equivalent to Room's UserDatabase.
+/// Manages the Core Data stack — single persistent container shared across the app.
 ///
-/// Android mapping:
-/// - Room.databaseBuilder() -> NSPersistentContainer()
-/// - UserDatabase.Factory.create() -> CoreDataManager.init()
-/// - SQLCipher encryption -> NSFileProtectionComplete (Phase 10)
-///
-/// WHY singleton?
-/// Same as Android — Room database is provided as @Singleton by Hilt.
-/// One database instance, one persistent container, shared across the app.
+/// One database instance, one persistent container, shared as a singleton so all
+/// layers access the same underlying store.
 final class CoreDataManager {
 
     static let shared = CoreDataManager()
 
-    /// Equivalent to Room's RoomDatabase instance.
     let persistentContainer: NSPersistentContainer
 
-    /// Main thread context for reads — equivalent to Room's main thread queries.
+    /// Main thread context for reads.
     var viewContext: NSManagedObjectContext {
         persistentContainer.viewContext
     }
 
     private init() {
-        // Equivalent to Room.databaseBuilder(context, UserDatabase::class.java, "github_users.db")
         persistentContainer = NSPersistentContainer(name: "GitPulse")
 
-        // Configure file protection (equivalent to SQLCipher at a different level).
+        // File protection encrypts the store at rest when the device is locked.
         if let storeDescription = persistentContainer.persistentStoreDescriptions.first {
             storeDescription.setOption(
                 FileProtectionType.complete as NSObject,
@@ -47,21 +39,20 @@ final class CoreDataManager {
             }
         }
 
-        // Auto-merge changes from background contexts — like Room's auto-invalidation.
+        // Auto-merge changes from background contexts into the view context.
         viewContext.automaticallyMergesChangesFromParent = true
         viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
 
     /// Create a background context for write operations.
-    /// Equivalent to Room's @Transaction running on a background thread.
     func newBackgroundContext() -> NSManagedObjectContext {
         let context = persistentContainer.newBackgroundContext()
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return context
     }
 
-    /// Save context if there are changes.
-    /// Called from SceneDelegate.sceneDidEnterBackground().
+    /// Save the view context if there are pending changes.
+    /// Called from `SceneDelegate.sceneDidEnterBackground()`.
     func saveContext() {
         let context = viewContext
         if context.hasChanges {

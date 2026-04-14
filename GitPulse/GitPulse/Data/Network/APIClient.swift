@@ -7,13 +7,8 @@
 
 import Foundation
 
-/// HTTP client wrapping URLSession — equivalent to OkHttpClient + Retrofit combined.
-///
-/// Android mapping:
-/// - OkHttpClient.Builder().connectTimeout(30s) -> URLSessionConfiguration.timeoutIntervalForRequest
-/// - Retrofit.Builder().baseUrl() -> APIEndpoint handles base URL
-/// - ErrorHandlingCallAdapterFactory -> response validation in request()
-/// - HttpLoggingInterceptor -> #if DEBUG logging
+/// HTTP client wrapping `URLSession` with SSL pinning, timeout configuration,
+/// response validation, and debug logging.
 final class APIClient: @unchecked Sendable {
 
     private let session: URLSession
@@ -27,8 +22,7 @@ final class APIClient: @unchecked Sendable {
             config.timeoutIntervalForRequest = 30
             config.timeoutIntervalForResource = 60
 
-            // SSL certificate pinning — equivalent to:
-            // OkHttpClient.Builder().certificatePinner(pinner).build()
+            // SSL certificate pinning via URLSession delegate.
             // URLSession retains the delegate strongly for the session's lifetime.
             let pinningDelegate = SSLPinningDelegate()
             self.session = URLSession(
@@ -37,7 +31,6 @@ final class APIClient: @unchecked Sendable {
                 delegateQueue: nil
             )
         }
-
     }
 
     /// Perform a network request and decode the response.

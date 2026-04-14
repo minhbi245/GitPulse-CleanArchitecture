@@ -6,7 +6,6 @@
 //
 
 /// Domain model for detailed GitHub user info.
-/// Maps from: Android `UserDetailsModel.kt`
 struct UserDetailsModel: Equatable {
     let username: String
     let avatarUrl: String

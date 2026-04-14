@@ -8,9 +8,8 @@
 import Foundation
 
 /// DTO for GitHub user list API response.
-/// Maps from: Android `UserResponse.kt`
 ///
-/// Only includes fields we actually USE (YAGNI).
+/// Only includes fields we actually use (YAGNI).
 struct UserResponse: Decodable {
     let id: Int?
     let login: String?

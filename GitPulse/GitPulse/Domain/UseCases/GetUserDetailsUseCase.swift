@@ -7,8 +7,7 @@
 
 import Combine
 
-/// Use case for fetching user detail information.
-/// Maps from: Android `GetUserDetailsUseCase.kt`
+/// Use case for fetching detailed user information.
 final class GetUserDetailsUseCase {
 
     private let repository: UserRepositoryProtocol

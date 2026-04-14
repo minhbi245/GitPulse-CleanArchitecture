@@ -8,15 +8,11 @@
 import Foundation
 import CryptoKit
 
-/// SSL certificate pinning via URLSession delegate.
-/// Equivalent to: Android's OkHttp `CertificatePinner`.
+/// SSL certificate pinning via `URLSessionDelegate`.
 ///
-/// Android: OkHttp intercepts the TLS handshake, extracts the server's public key,
-/// hashes it with SHA256, and compares to the pinned hash.
-///
-/// iOS: URLSession calls this delegate during TLS handshake. We extract the server's
-/// public key from the certificate chain, hash with SHA256, and compare to pinned hash.
-/// If no match, reject the connection.
+/// During the TLS handshake, the server's public key is extracted from the
+/// certificate chain, hashed with SHA256, and compared to the pinned hash.
+/// If no match, the connection is rejected.
 ///
 /// Debug builds allow mismatched pins (development convenience).
 /// Release builds reject mismatched pins.
@@ -45,7 +41,7 @@ final class SSLPinningDelegate: NSObject, URLSessionDelegate, @unchecked Sendabl
         super.init()
     }
 
-    /// URLSession authentication challenge — equivalent to OkHttp `CertificatePinner.check()`.
+    /// URLSession authentication challenge handler — validates the server's public key.
     func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge,

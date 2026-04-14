@@ -9,14 +9,11 @@ import Combine
 import Foundation
 
 /// Manages pagination state and offline-first loading strategy.
-/// Equivalent to: Android's UserRemoteMediator
 ///
-/// Android RemoteMediator has 3 methods:
-/// - initialize() -> check if cache is fresh
-/// - load(REFRESH, ...) -> clear cache, fetch first page
-/// - load(APPEND, ...) -> fetch next page after last item
-///
-/// This class provides the same 3 operations as explicit methods.
+/// Provides three explicit operations:
+/// - `loadInitial()` — load from cache first, then refresh if stale
+/// - `refresh()`     — clear cache, fetch first page from network
+/// - `loadNextPage()` — fetch next page using last user ID
 final class PaginationManager: Sendable {
 
     // MARK: - Dependencies
@@ -28,18 +25,15 @@ final class PaginationManager: Sendable {
     // MARK: - State
 
     /// Current list of users — UI observes this.
-    /// Equivalent to: Pager flow emitting PagingData
     @MainActor let usersSubject = CurrentValueSubject<[UserModel], Never>([])
 
-    /// Loading state for UI
+    /// Loading state for UI.
     @MainActor let loadingSubject = CurrentValueSubject<PaginationLoadState, Never>(.idle)
 
     /// Whether more pages are available.
-    /// Equivalent to: MediatorResult.Success(endOfPaginationReached)
     @MainActor private(set) var hasMorePages = true
 
-    /// Last user ID for APPEND queries.
-    /// Equivalent to: state.lastItemOrNull()?.id
+    /// Last user ID for append queries.
     @MainActor private var lastUserId: Int = 0
 
     /// Prevent concurrent loads.
@@ -47,11 +41,10 @@ final class PaginationManager: Sendable {
 
     // MARK: - Constants
 
-    /// Equivalent to: companion object { private const val PAGE_SIZE = 20 }
     static let pageSize = 20
 
-    /// Equivalent to: TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
-    static let cacheTimeout: TimeInterval = 3600 // 1 hour in seconds
+    /// Cache validity window — 1 hour in seconds.
+    static let cacheTimeout: TimeInterval = 3600
 
     // MARK: - Init
 
@@ -67,10 +60,7 @@ final class PaginationManager: Sendable {
 
     // MARK: - Public API
 
-    /// Check if cache is fresh — equivalent to RemoteMediator.initialize()
-    ///
-    /// Returns true if cache is valid (SKIP_INITIAL_REFRESH)
-    /// Returns false if cache is stale (LAUNCH_INITIAL_REFRESH)
+    /// Returns true if the cache is still within the validity window.
     @MainActor func isCacheFresh() -> Bool {
         let lastUpdated = preferencesStore.getLastUpdatedUserList()
         let elapsed = Date().timeIntervalSince1970 - lastUpdated
@@ -78,9 +68,8 @@ final class PaginationManager: Sendable {
     }
 
     /// Initial load — loads from cache first, then refreshes if stale.
-    /// Equivalent to: RemoteMediator.initialize() + possible REFRESH
     @MainActor func loadInitial() async {
-        // Always load cached data first (offline-first)
+        // Always load cached data first (offline-first).
         loadCachedUsers()
 
         if !isCacheFresh() {
@@ -89,7 +78,6 @@ final class PaginationManager: Sendable {
     }
 
     /// REFRESH — clear cache, fetch first page from network.
-    /// Equivalent to: load(LoadType.REFRESH, ...)
     @MainActor func refresh() async {
         guard !isLoading else { return }
         isLoading = true
@@ -102,7 +90,7 @@ final class PaginationManager: Sendable {
         do {
             let responses = try await userService.getUsers(
                 perPage: Self.pageSize,
-                since: 0 // INITIAL_SINCE
+                since: 0
             )
 
             let localUsers = UserResponseMapper.mapToLocalList(responses)
@@ -112,7 +100,7 @@ final class PaginationManager: Sendable {
 
             hasMorePages = responses.count >= Self.pageSize
 
-            // Reload from cache to get mapped domain models
+            // Reload from cache to get mapped domain models.
             loadCachedUsers()
             loadingSubject.send(.idle)
         } catch {
@@ -121,7 +109,6 @@ final class PaginationManager: Sendable {
     }
 
     /// APPEND — fetch next page using last user ID.
-    /// Equivalent to: load(LoadType.APPEND, ...)
     @MainActor func loadNextPage() async {
         guard !isLoading, hasMorePages else { return }
         isLoading = true
@@ -162,7 +149,7 @@ final class PaginationManager: Sendable {
     }
 }
 
-/// Pagination loading states — equivalent to Paging3 LoadState.
+/// Pagination loading states.
 enum PaginationLoadState: Equatable {
     case idle
     case refreshing

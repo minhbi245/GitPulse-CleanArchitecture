@@ -2,8 +2,6 @@
 //  NetworkErrorMapperTests.swift
 //  GitPulseTests
 //
-//  Equivalent to Android `ErrorMappersKtTest` + `ErrorHandlingCallbackTest`.
-//
 
 import XCTest
 @testable import GitPulse

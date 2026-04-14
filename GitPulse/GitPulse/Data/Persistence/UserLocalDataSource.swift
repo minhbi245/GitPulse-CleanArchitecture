@@ -7,18 +7,11 @@
 
 import CoreData
 
-/// Local data source for cached users — equivalent to Room's UserDao.
+/// Local data source for cached users backed by Core Data.
 ///
-/// Android mapping:
-/// - @Dao interface -> UserLocalDataSourceProtocol
-/// - @Query("SELECT * FROM UserEntity") -> NSFetchRequest
-/// - @Upsert -> manual fetch-or-insert in a background context
-/// - @Transaction -> performAndWait {} block
-/// - PagingSource -> fetchAll() returns array (pagination at repository level)
-///
-/// WHY protocol + implementation?
-/// Same pattern as Android: UserDao is an interface, Room generates the impl.
-/// We define protocol for testability, write impl manually.
+/// The protocol enables testability — the implementation can be swapped for a mock.
+/// Core Data has no built-in upsert, so `upsertAll` batch-fetches existing records
+/// by ID, then updates or inserts as needed.
 protocol UserLocalDataSourceProtocol {
     func fetchAll() throws -> [UserEntity]
     func upsertAll(_ users: [(id: Int, username: String, avatarUrl: String, url: String)]) throws
@@ -38,8 +31,7 @@ final class UserLocalDataSource: UserLocalDataSourceProtocol {
     }
 
     /// Fetch all cached users, ordered by ID.
-    /// Equivalent to: @Query("SELECT * FROM UserEntity")
-    /// Uses viewContext.performAndWait to ensure thread-safe access.
+    /// Uses `viewContext.performAndWait` to ensure thread-safe access.
     func fetchAll() throws -> [UserEntity] {
         var result: [UserEntity] = []
         var fetchError: Error?
@@ -56,11 +48,7 @@ final class UserLocalDataSource: UserLocalDataSourceProtocol {
         return result
     }
 
-    /// Insert or update users.
-    /// Equivalent to: @Upsert suspend fun upsertAll(entities)
-    ///
-    /// Room's @Upsert does: INSERT OR REPLACE. Core Data has no built-in upsert,
-    /// so we batch-fetch existing by ID set, then update or create new.
+    /// Insert or update users in a background context.
     func upsertAll(
         _ users: [(id: Int, username: String, avatarUrl: String, url: String)]
     ) throws {
@@ -71,8 +59,7 @@ final class UserLocalDataSource: UserLocalDataSourceProtocol {
         }
     }
 
-    /// Delete all cached users.
-    /// Equivalent to: @Query("DELETE FROM UserEntity")
+    /// Delete all cached users using a batch delete for efficiency.
     func deleteAll() throws {
         let context = coreDataManager.newBackgroundContext()
         try context.performAndWait {
@@ -91,8 +78,7 @@ final class UserLocalDataSource: UserLocalDataSourceProtocol {
         }
     }
 
-    /// Atomic delete + insert in a single context — equivalent to @Transaction upsertAndDeleteAll().
-    /// Uses context-level delete (not batch) so both operations share one save.
+    /// Atomic delete + insert in a single context save.
     func upsertAndDeleteAll(
         needToDelete: Bool,
         users: [(id: Int, username: String, avatarUrl: String, url: String)]

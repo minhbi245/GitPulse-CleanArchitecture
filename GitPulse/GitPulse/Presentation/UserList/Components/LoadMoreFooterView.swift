@@ -8,7 +8,6 @@ import UIKit
 
 /// Footer view for pagination loading / retry state.
 ///
-/// Equivalent to Android `LoadState.Loading` / `LoadState.Error` items in the user list:
 ///   - `.loadingMore` → spinner
 ///   - `.error`       → retry button
 final class LoadMoreFooterView: UICollectionReusableView {

@@ -5,21 +5,20 @@
 
 import Foundation
 
-/// UI error state — equivalent to Android's `ErrorUiState` + exception mappers.
+/// UI error state — carries a display message and visibility flag.
 ///
-/// Android uses `@StringRes` for strings compiled into `R`; iOS uses displayable
-/// `String` values (or `NSLocalizedString` at call sites).
+/// iOS uses plain `String` values (or `NSLocalizedString` at call sites)
+/// rather than resource IDs.
 struct ErrorState: Equatable {
     let message: String
     let isVisible: Bool
 
     static let hidden = ErrorState(message: "", isVisible: false)
 
-    /// Equivalent to Android `hasError()`.
     var hasError: Bool { isVisible && !message.isEmpty }
 }
 
-/// Maps errors to user-facing state — equivalent to `Throwable?.toErrorUiState()`.
+/// Maps errors to user-facing state.
 enum ErrorStateMapper {
     static func map(_ error: Error) -> ErrorState {
         if let appError = error as? AppError {

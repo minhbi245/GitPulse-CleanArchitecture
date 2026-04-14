@@ -7,20 +7,17 @@ import Combine
 import Factory
 import Foundation
 
-/// UI state for the user list screen — equivalent to Android `UserListUiState`.
+/// UI state for the user list screen.
 struct UserListUiState: Equatable {
     var isRefreshing: Bool = false
 }
 
-/// One-shot navigation events — equivalent to Android sealed event class.
+/// One-shot navigation events emitted by the user list.
 enum UserListEvent: Equatable {
     case navigateToDetails(username: String, avatarUrl: String, url: String)
 }
 
 /// ViewModel for the user list screen.
-///
-/// Maps from: Android `UserListViewModel.kt` (28 lines because Paging3 hides the work).
-/// iOS version is larger because we orchestrate `PaginationManager` manually.
 @MainActor
 final class UserListViewModel: BaseViewModel<UserListUiState, UserListEvent> {
 
@@ -30,13 +27,13 @@ final class UserListViewModel: BaseViewModel<UserListUiState, UserListEvent> {
 
     // MARK: - Published State
 
-    /// User list — equivalent to `val userPaging = getUserPagingUseCase().cachedIn(viewModelScope)`.
+    /// Current user list driven by the pagination manager.
     @Published private(set) var users: [UserModel] = []
 
     /// Pagination load state for the append (next page) lane.
     @Published private(set) var paginationState: PaginationLoadState = .idle
 
-    /// Whether more pages are available — surfaced for the VC to gate `loadNextPage`.
+    /// Whether more pages are available — gates `loadNextPage` calls.
     var hasMorePages: Bool {
         paginationManager.hasMorePages
     }
@@ -50,7 +47,6 @@ final class UserListViewModel: BaseViewModel<UserListUiState, UserListEvent> {
     }
 
     /// Convenience initializer using the Factory DI container.
-    /// Equivalent to `@HiltViewModel @Inject constructor(getUserPagingUseCase)`.
     convenience init() {
         self.init(paginationManager: Container.shared.paginationManager())
     }
@@ -64,7 +60,7 @@ final class UserListViewModel: BaseViewModel<UserListUiState, UserListEvent> {
         }
     }
 
-    /// Pull-to-refresh — equivalent to `pagingItems.refresh() + setRefreshing(true)`.
+    /// Pull-to-refresh.
     /// Uses an explicit `Task` so the `defer` block still clears `isRefreshing`
     /// if the task is cancelled mid-flight (e.g., VC dismissal).
     func refresh() {
@@ -87,12 +83,12 @@ final class UserListViewModel: BaseViewModel<UserListUiState, UserListEvent> {
         }
     }
 
-    /// Retry append after error — equivalent to `pagingItems.retry()`.
+    /// Retry append after error.
     func retryLoadNextPage() {
         loadNextPage()
     }
 
-    /// Navigate to user details — equivalent to `navController.navigate(user.toUserDetailsDestination())`.
+    /// Navigate to user details.
     func selectUser(_ user: UserModel) {
         sendEvent(.navigateToDetails(
             username: user.username,
@@ -104,7 +100,6 @@ final class UserListViewModel: BaseViewModel<UserListUiState, UserListEvent> {
     // MARK: - Override
 
     /// Suppress the global loading overlay while a pull-to-refresh is in flight.
-    /// Equivalent to Android override that bypasses `super.setLoading` when refreshing.
     override func setLoading(_ loading: Bool) {
         if !state.isRefreshing {
             super.setLoading(loading)

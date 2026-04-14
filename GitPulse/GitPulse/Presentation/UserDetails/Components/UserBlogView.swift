@@ -6,7 +6,7 @@
 import SnapKit
 import UIKit
 
-/// Blog link card — equivalent to Android `UserBlog` composable.
+/// Blog link card — tappable to open the user's blog URL.
 final class UserBlogView: UIView {
 
     private let titleLabel: UILabel = {
