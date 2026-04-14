@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitPulse - Design System Overview</title>
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --bg-secondary: #F6F8FA;
+    --surface: #FFFFFF;
+    --surface-border: #D0D7DE;
+    --text-primary: #1F2328;
+    --text-secondary: #656D76;
+    --text-tertiary: #818B98;
+    --primary: #0969DA;
+    --primary-light: #DDF4FF;
+    --accent: #0550AE;
+    --success: #1A7F37;
+    --warning: #9A6700;
+    --error: #CF222E;
+    --info: #0969DA;
+    --separator: #D8DEE4;
+    --skeleton-base: #E1E4E8;
+    --skeleton-shine: #F6F8FA;
+    --stats-bg: #F6F8FA;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+    background: #0D1117;
+    color: #E6EDF3;
+    padding: 40px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .ds-header {
+    text-align: center;
+    margin-bottom: 56px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #21262D;
+  }
+
+  .ds-header h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #58A6FF, #79C0FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .ds-header p {
+    font-size: 16px;
+    color: #8B949E;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 56px;
+  }
+
+  .section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #E6EDF3;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: #8B949E;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  /* Color Palette */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .color-card {
+    background: #161B22;
+    border: 1px solid #21262D;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .color-swatch {
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Menlo', monospace;
+  }
+
+  .color-info {
+    padding: 12px;
+  }
+
+  .color-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #E6EDF3;
+    margin-bottom: 2px;
+  }
+
+  .color-token {
+    font-size: 12px;
+    color: #8B949E;
+    font-family: 'SF Mono', 'Menlo', monospace;
+  }
+
+  .color-pair {
+    display: flex;
+    gap: 2px;
+    margin-top: 8px;
+  }
+
+  .color-pair-swatch {
+    flex: 1;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    font-family: 'SF Mono', monospace;
+    border-radius: 4px;
+  }
+
+  .mode-label {
+    font-size: 10px;
+    color: #6E7681;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  /* Typography */
+  .type-scale {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: #21262D;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .type-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 100px 80px;
+    align-items: center;
+    padding: 16px 20px;
+    background: #161B22;
+    gap: 16px;
+  }
+
+  .type-row.header {
+    background: #0D1117;
+    font-size: 12px;
+    font-weight: 600;
+    color: #8B949E;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 20px;
+  }
+
+  .type-style-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #58A6FF;
+    font-family: 'SF Mono', monospace;
+  }
+
+  .type-sample { color: #E6EDF3; }
+  .type-weight { font-size: 13px; color: #8B949E; }
+  .type-size { font-size: 13px; color: #8B949E; font-family: 'SF Mono', monospace; }
+
+  /* Spacing */
+  .spacing-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+  }
+
+  .spacing-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .spacing-box {
+    background: linear-gradient(135deg, #58A6FF, #388BFD);
+    border-radius: 4px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spacing-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: #E6EDF3;
+    font-family: 'SF Mono', monospace;
+  }
+
+  .spacing-token {
+    font-size: 11px;
+    color: #8B949E;
+    font-family: 'SF Mono', monospace;
+  }
+
+  /* Icons */
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .icon-card {
+    background: #161B22;
+    border: 1px solid #21262D;
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .icon-card:hover { border-color: #58A6FF; }
+
+  .icon-preview {
+    font-size: 28px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-name {
+    font-size: 11px;
+    color: #58A6FF;
+    font-family: 'SF Mono', monospace;
+    word-break: break-all;
+    line-height: 1.3;
+  }
+
+  .icon-purpose {
+    font-size: 12px;
+    color: #8B949E;
+  }
+
+  /* Components Preview */
+  .component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+  }
+
+  .component-card {
+    background: #161B22;
+    border: 1px solid #21262D;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .component-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #21262D;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .component-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #E6EDF3;
+  }
+
+  .component-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #21262D;
+    color: #8B949E;
+    font-family: 'SF Mono', monospace;
+  }
+
+  .component-preview {
+    padding: 24px 16px;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Inline component previews */
+  .preview-light {
+    background: #FFFFFF;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .preview-dark {
+    background: #0D1117;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .preview-split {
+    display: flex;
+    gap: 2px;
+    width: 100%;
+  }
+
+  .preview-split > div {
+    flex: 1;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  /* User Card Preview */
+  .prev-user-cell {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+  }
+
+  .prev-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .prev-cell-text {
+    margin-left: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .prev-username-light {
+    font-size: 17px;
+    font-weight: 600;
+    color: #1F2328;
+    line-height: 22px;
+  }
+
+  .prev-username-dark {
+    font-size: 17px;
+    font-weight: 600;
+    color: #E6EDF3;
+    line-height: 22px;
+  }
+
+  .prev-url-light {
+    font-size: 15px;
+    color: #0969DA;
+    line-height: 20px;
+    margin-top: 2px;
+    text-decoration: underline;
+    text-decoration-color: rgba(9,105,218,0.3);
+    text-underline-offset: 2px;
+  }
+
+  .prev-url-dark {
+    font-size: 15px;
+    color: #58A6FF;
+    line-height: 20px;
+    margin-top: 2px;
+    text-decoration: underline;
+    text-decoration-color: rgba(88,166,255,0.3);
+    text-underline-offset: 2px;
+  }
+
+  .prev-disclosure-light { color: #818B98; font-size: 14px; margin-left: 8px; }
+  .prev-disclosure-dark { color: #6E7681; font-size: 14px; margin-left: 8px; }
+
+  .prev-separator-light { height: 0.5px; background: #D8DEE4; margin-left: 76px; }
+  .prev-separator-dark { height: 0.5px; background: #21262D; margin-left: 76px; }
+
+  /* Stats Preview */
+  .prev-stats-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px 16px;
+  }
+
+  .prev-stats-row {
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    padding: 16px 32px;
+  }
+
+  .prev-stats-row-light { background: #F6F8FA; }
+  .prev-stats-row-dark { background: #161B22; }
+
+  .prev-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 80px;
+  }
+
+  .prev-stat-icon { font-size: 14px; margin-bottom: 2px; }
+  .prev-stat-icon-light { color: #656D76; }
+  .prev-stat-icon-dark { color: #8B949E; }
+
+  .prev-stat-num { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .prev-stat-num-light { color: #1F2328; }
+  .prev-stat-num-dark { color: #E6EDF3; }
+
+  .prev-stat-label { font-size: 13px; margin-top: 2px; }
+  .prev-stat-label-light { color: #656D76; }
+  .prev-stat-label-dark { color: #8B949E; }
+
+  .prev-stats-divider {
+    width: 1px;
+    height: 36px;
+    margin: 0 24px;
+    flex-shrink: 0;
+  }
+  .prev-stats-divider-light { background: #D8DEE4; }
+  .prev-stats-divider-dark { background: #30363D; }
+
+  /* Error Preview */
+  .prev-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+    text-align: center;
+  }
+
+  .prev-error-icon { font-size: 40px; margin-bottom: 12px; }
+  .prev-error-icon-light { color: #CF222E; opacity: 0.8; }
+  .prev-error-icon-dark { color: #F85149; opacity: 0.8; }
+
+  .prev-error-title { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+  .prev-error-title-light { color: #1F2328; }
+  .prev-error-title-dark { color: #E6EDF3; }
+
+  .prev-error-msg { font-size: 15px; line-height: 1.4; margin-bottom: 16px; }
+  .prev-error-msg-light { color: #656D76; }
+  .prev-error-msg-dark { color: #8B949E; }
+
+  .prev-retry-btn {
+    padding: 10px 32px;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    color: #fff;
+  }
+  .prev-retry-btn-light { background: #0969DA; }
+  .prev-retry-btn-dark { background: #58A6FF; color: #0D1117; }
+
+  /* Loading Preview */
+  .prev-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    gap: 12px;
+  }
+
+  .prev-spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid #D8DEE4;
+    border-top-color: #0969DA;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .prev-spinner-dark {
+    border-color: #30363D;
+    border-top-color: #58A6FF;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Info Row Preview */
+  .prev-info-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .prev-info-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .prev-info-icon-light { background: #F6F8FA; color: #656D76; }
+  .prev-info-icon-dark { background: #161B22; color: #8B949E; }
+
+  .prev-info-text { font-size: 17px; line-height: 22px; }
+  .prev-info-text-light { color: #1F2328; }
+  .prev-info-text-dark { color: #E6EDF3; }
+
+  .prev-info-link-light { color: #0969DA; text-decoration: underline; text-decoration-color: rgba(9,105,218,0.3); text-underline-offset: 2px; }
+  .prev-info-link-dark { color: #58A6FF; text-decoration: underline; text-decoration-color: rgba(88,166,255,0.3); text-underline-offset: 2px; }
+
+  .prev-info-separator-light { height: 0.5px; background: #D8DEE4; margin-left: 60px; }
+  .prev-info-separator-dark { height: 0.5px; background: #21262D; margin-left: 60px; }
+
+  /* GitHub Button Preview */
+  .prev-gh-btn-wrap { padding: 16px; }
+
+  .prev-gh-btn {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .prev-gh-btn-light { background: #1F2328; color: #FFFFFF; }
+  .prev-gh-btn-dark { background: #E6EDF3; color: #0D1117; }
+
+  .prev-gh-btn svg { width: 20px; height: 20px; }
+  .prev-gh-btn-light svg { fill: #FFFFFF; }
+  .prev-gh-btn-dark svg { fill: #0D1117; }
+
+  /* Empty State Preview */
+  .prev-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+    text-align: center;
+  }
+
+  .prev-empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.5; }
+  .prev-empty-title { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+  .prev-empty-title-light { color: #1F2328; }
+  .prev-empty-title-dark { color: #E6EDF3; }
+  .prev-empty-msg { font-size: 15px; line-height: 1.4; }
+  .prev-empty-msg-light { color: #656D76; }
+  .prev-empty-msg-dark { color: #8B949E; }
+
+  /* Corner Radius */
+  .radius-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+  }
+
+  .radius-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .radius-box {
+    width: 64px;
+    height: 64px;
+    background: #161B22;
+    border: 2px solid #58A6FF;
+  }
+
+  .radius-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #E6EDF3;
+    font-family: 'SF Mono', monospace;
+  }
+
+  .radius-use {
+    font-size: 11px;
+    color: #8B949E;
+    text-align: center;
+    max-width: 80px;
+  }
+
+  /* Shadow */
+  .shadow-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .shadow-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .shadow-box {
+    width: 100px;
+    height: 80px;
+    background: #E6EDF3;
+    border-radius: 12px;
+  }
+
+  .shadow-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #E6EDF3;
+  }
+
+  .shadow-spec {
+    font-size: 11px;
+    color: #8B949E;
+    font-family: 'SF Mono', monospace;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .type-row { grid-template-columns: 120px 1fr 80px 60px; padding: 12px 12px; }
+    .component-grid { grid-template-columns: 1fr; }
+    .color-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<div class="ds-header">
+  <h1>GitPulse Design System</h1>
+  <p>iOS UIKit &bull; SF Pro &bull; SF Symbols &bull; Apple HIG Compliant</p>
+</div>
+
+<!-- ====== COLOR PALETTE ====== -->
+<div class="section">
+  <div class="section-title">Color Palette</div>
+  <div class="section-desc">GitHub-inspired adaptive colors with full light/dark mode support. All colors defined as named assets in Colors.xcassets.</div>
+
+  <div style="margin-bottom:12px;"><div class="mode-label">Primary &amp; Accent</div></div>
+  <div class="color-grid" style="margin-bottom:24px;">
+    <div class="color-card">
+      <div class="color-swatch" style="background:#0969DA;color:#fff;">#0969DA</div>
+      <div class="color-info">
+        <div class="color-name">Primary</div>
+        <div class="color-token">Colors/primary</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#0969DA;color:#fff;">Light</div>
+          <div class="color-pair-swatch" style="background:#58A6FF;color:#000;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#DDF4FF;color:#0969DA;">#DDF4FF</div>
+      <div class="color-info">
+        <div class="color-name">Primary Light</div>
+        <div class="color-token">Colors/primaryLight</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#DDF4FF;color:#0969DA;">Light</div>
+          <div class="color-pair-swatch" style="background:#0D1117;color:#58A6FF;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#656D76;color:#fff;">#656D76</div>
+      <div class="color-info">
+        <div class="color-name">Secondary</div>
+        <div class="color-token">Colors/secondary</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#656D76;color:#fff;">Light</div>
+          <div class="color-pair-swatch" style="background:#8B949E;color:#000;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#0550AE;color:#fff;">#0550AE</div>
+      <div class="color-info">
+        <div class="color-name">Accent</div>
+        <div class="color-token">Colors/accent</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#0550AE;color:#fff;">Light</div>
+          <div class="color-pair-swatch" style="background:#79C0FF;color:#000;">Dark</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:12px;"><div class="mode-label">Semantic</div></div>
+  <div class="color-grid" style="margin-bottom:24px;">
+    <div class="color-card">
+      <div class="color-swatch" style="background:#1A7F37;color:#fff;">#1A7F37</div>
+      <div class="color-info">
+        <div class="color-name">Success</div>
+        <div class="color-token">Colors/success</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#1A7F37;color:#fff;">Light</div>
+          <div class="color-pair-swatch" style="background:#3FB950;color:#000;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#9A6700;color:#fff;">#9A6700</div>
+      <div class="color-info">
+        <div class="color-name">Warning</div>
+        <div class="color-token">Colors/warning</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#9A6700;color:#fff;">Light</div>
+          <div class="color-pair-swatch" style="background:#D29922;color:#000;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#CF222E;color:#fff;">#CF222E</div>
+      <div class="color-info">
+        <div class="color-name">Error</div>
+        <div class="color-token">Colors/error</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#CF222E;color:#fff;">Light</div>
+          <div class="color-pair-swatch" style="background:#F85149;color:#000;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#0969DA;color:#fff;">#0969DA</div>
+      <div class="color-info">
+        <div class="color-name">Info</div>
+        <div class="color-token">Colors/info</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#0969DA;color:#fff;">Light</div>
+          <div class="color-pair-swatch" style="background:#58A6FF;color:#000;">Dark</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:12px;"><div class="mode-label">Neutrals &amp; Backgrounds</div></div>
+  <div class="color-grid">
+    <div class="color-card">
+      <div class="color-swatch" style="background:#FFFFFF;color:#1F2328;border-bottom:1px solid #D0D7DE;">#FFFFFF</div>
+      <div class="color-info">
+        <div class="color-name">Background</div>
+        <div class="color-token">Colors/background</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#FFFFFF;color:#1F2328;border:1px solid #D0D7DE;">Light</div>
+          <div class="color-pair-swatch" style="background:#0D1117;color:#E6EDF3;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#F6F8FA;color:#1F2328;border-bottom:1px solid #D0D7DE;">#F6F8FA</div>
+      <div class="color-info">
+        <div class="color-name">Background Secondary</div>
+        <div class="color-token">Colors/backgroundSecondary</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#F6F8FA;color:#1F2328;border:1px solid #D0D7DE;">Light</div>
+          <div class="color-pair-swatch" style="background:#161B22;color:#E6EDF3;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#1F2328;color:#fff;">#1F2328</div>
+      <div class="color-info">
+        <div class="color-name">Text Primary</div>
+        <div class="color-token">Colors/textPrimary</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#1F2328;color:#fff;">Light</div>
+          <div class="color-pair-swatch" style="background:#E6EDF3;color:#000;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#656D76;color:#fff;">#656D76</div>
+      <div class="color-info">
+        <div class="color-name">Text Secondary</div>
+        <div class="color-token">Colors/textSecondary</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#656D76;color:#fff;">Light</div>
+          <div class="color-pair-swatch" style="background:#8B949E;color:#000;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#D0D7DE;color:#1F2328;">#D0D7DE</div>
+      <div class="color-info">
+        <div class="color-name">Surface Border</div>
+        <div class="color-token">Colors/surfaceBorder</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#D0D7DE;color:#1F2328;">Light</div>
+          <div class="color-pair-swatch" style="background:#30363D;color:#E6EDF3;">Dark</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background:#D8DEE4;color:#1F2328;">#D8DEE4</div>
+      <div class="color-info">
+        <div class="color-name">Separator</div>
+        <div class="color-token">Colors/separator</div>
+        <div class="color-pair">
+          <div class="color-pair-swatch" style="background:#D8DEE4;color:#1F2328;">Light</div>
+          <div class="color-pair-swatch" style="background:#21262D;color:#E6EDF3;">Dark</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== TYPOGRAPHY ====== -->
+<div class="section">
+  <div class="section-title">Typography Scale</div>
+  <div class="section-desc">SF Pro via system font API. All styles support Dynamic Type scaling. Use UIFont.preferredFont(forTextStyle:) exclusively.</div>
+
+  <div class="type-scale">
+    <div class="type-row header">
+      <span>Text Style</span>
+      <span>Sample</span>
+      <span>Weight</span>
+      <span>Size</span>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.largeTitle</div>
+      <div class="type-sample" style="font-size:34px;font-weight:700;letter-spacing:0.37px;">GitHub Users</div>
+      <div class="type-weight">Bold</div>
+      <div class="type-size">34pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.title1</div>
+      <div class="type-sample" style="font-size:28px;font-weight:700;">Section Header</div>
+      <div class="type-weight">Bold</div>
+      <div class="type-size">28pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.title2</div>
+      <div class="type-sample" style="font-size:22px;font-weight:700;">Tom Preston-Werner</div>
+      <div class="type-weight">Bold</div>
+      <div class="type-size">22pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.title3</div>
+      <div class="type-sample" style="font-size:20px;font-weight:600;">23,847</div>
+      <div class="type-weight">Semibold</div>
+      <div class="type-size">20pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.headline</div>
+      <div class="type-sample" style="font-size:17px;font-weight:600;">mojombo</div>
+      <div class="type-weight">Semibold</div>
+      <div class="type-size">17pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.body</div>
+      <div class="type-sample" style="font-size:17px;font-weight:400;">San Francisco, CA</div>
+      <div class="type-weight">Regular</div>
+      <div class="type-size">17pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.callout</div>
+      <div class="type-sample" style="font-size:16px;font-weight:400;">Profile information</div>
+      <div class="type-weight">Regular</div>
+      <div class="type-size">16pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.subheadline</div>
+      <div class="type-sample" style="font-size:15px;font-weight:400;color:#58A6FF;text-decoration:underline;">github.com/mojombo</div>
+      <div class="type-weight">Regular</div>
+      <div class="type-size">15pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.footnote</div>
+      <div class="type-sample" style="font-size:13px;font-weight:400;color:#8B949E;">Followers</div>
+      <div class="type-weight">Regular</div>
+      <div class="type-size">13pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.caption1</div>
+      <div class="type-sample" style="font-size:12px;font-weight:400;color:#8B949E;">Last updated 2 min ago</div>
+      <div class="type-weight">Regular</div>
+      <div class="type-size">12pt</div>
+    </div>
+    <div class="type-row">
+      <div class="type-style-name">.caption2</div>
+      <div class="type-sample" style="font-size:11px;font-weight:400;color:#6E7681;">ID: 1</div>
+      <div class="type-weight">Regular</div>
+      <div class="type-size">11pt</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SPACING ====== -->
+<div class="section">
+  <div class="section-title">Spacing System</div>
+  <div class="section-desc">4pt base grid. Consistent spacing tokens for all padding, margins, and gaps throughout the app.</div>
+
+  <div class="spacing-grid">
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:4px;height:4px;"></div>
+      <div class="spacing-value">4</div>
+      <div class="spacing-token">space-1</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:8px;height:8px;"></div>
+      <div class="spacing-value">8</div>
+      <div class="spacing-token">space-2</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:12px;height:12px;"></div>
+      <div class="spacing-value">12</div>
+      <div class="spacing-token">space-3</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:16px;height:16px;"></div>
+      <div class="spacing-value">16</div>
+      <div class="spacing-token">space-4</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:20px;height:20px;"></div>
+      <div class="spacing-value">20</div>
+      <div class="spacing-token">space-5</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:24px;height:24px;"></div>
+      <div class="spacing-value">24</div>
+      <div class="spacing-token">space-6</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:32px;height:32px;"></div>
+      <div class="spacing-value">32</div>
+      <div class="spacing-token">space-8</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:40px;height:40px;"></div>
+      <div class="spacing-value">40</div>
+      <div class="spacing-token">space-10</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:48px;height:48px;"></div>
+      <div class="spacing-value">48</div>
+      <div class="spacing-token">space-12</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== CORNER RADIUS ====== -->
+<div class="section">
+  <div class="section-title">Corner Radius</div>
+  <div class="section-desc">Consistent radii for all rounded elements. Circles use half the element dimension.</div>
+
+  <div class="radius-grid">
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:0;"></div>
+      <div class="radius-label">0pt</div>
+      <div class="radius-use">None</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:4px;"></div>
+      <div class="radius-label">4pt</div>
+      <div class="radius-use">Tags</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:8px;"></div>
+      <div class="radius-label">8pt</div>
+      <div class="radius-use">Info icons, inputs</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:10px;"></div>
+      <div class="radius-label">10pt</div>
+      <div class="radius-use">Buttons</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:12px;"></div>
+      <div class="radius-label">12pt</div>
+      <div class="radius-use">Cards, stats row</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:50%;"></div>
+      <div class="radius-label">50%</div>
+      <div class="radius-use">Avatars</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SHADOWS ====== -->
+<div class="section">
+  <div class="section-title">Elevation &amp; Shadows</div>
+  <div class="section-desc">iOS-appropriate subtle shadows. Lighter than Material Design elevation.</div>
+
+  <div class="shadow-grid">
+    <div class="shadow-item">
+      <div class="shadow-box" style="box-shadow:none;"></div>
+      <div class="shadow-name">None</div>
+      <div class="shadow-spec">Flat surfaces</div>
+    </div>
+    <div class="shadow-item">
+      <div class="shadow-box" style="box-shadow:0 1px 3px rgba(31,35,40,0.06);"></div>
+      <div class="shadow-name">Subtle</div>
+      <div class="shadow-spec">0, 1, 3<br>opacity: 0.06</div>
+    </div>
+    <div class="shadow-item">
+      <div class="shadow-box" style="box-shadow:0 2px 8px rgba(31,35,40,0.10);"></div>
+      <div class="shadow-name">Medium</div>
+      <div class="shadow-spec">0, 2, 8<br>opacity: 0.10</div>
+    </div>
+    <div class="shadow-item">
+      <div class="shadow-box" style="box-shadow:0 4px 12px rgba(31,35,40,0.15);"></div>
+      <div class="shadow-name">High</div>
+      <div class="shadow-spec">0, 4, 12<br>opacity: 0.15</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== ICONS ====== -->
+<div class="section">
+  <div class="section-title">SF Symbols</div>
+  <div class="section-desc">All icons use SF Symbols for native iOS consistency. Weight: Medium. Rendering: context-dependent.</div>
+
+  <div class="icon-grid">
+    <div class="icon-card">
+      <div class="icon-preview">&#128101;</div>
+      <div class="icon-name">person.2.fill</div>
+      <div class="icon-purpose">Followers</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#128100;+</div>
+      <div class="icon-name">person.badge.plus</div>
+      <div class="icon-purpose">Following</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#128205;</div>
+      <div class="icon-name">mappin.and.ellipse</div>
+      <div class="icon-purpose">Location</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#128279;</div>
+      <div class="icon-name">link</div>
+      <div class="icon-purpose">Blog / URL</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#8249;</div>
+      <div class="icon-name">chevron.left</div>
+      <div class="icon-purpose">Back navigation</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#9888;</div>
+      <div class="icon-name">exclamationmark.triangle.fill</div>
+      <div class="icon-purpose">Error state</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#128260;</div>
+      <div class="icon-name">arrow.clockwise</div>
+      <div class="icon-purpose">Retry / Refresh</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#8599;</div>
+      <div class="icon-name">arrow.up.right.square</div>
+      <div class="icon-purpose">External link</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#8943;</div>
+      <div class="icon-name">ellipsis.circle</div>
+      <div class="icon-purpose">Loading more</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#128100;?</div>
+      <div class="icon-name">person.crop.circle.badge.questionmark</div>
+      <div class="icon-purpose">Empty state</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview" style="text-decoration:line-through;">&#128246;</div>
+      <div class="icon-name">wifi.slash</div>
+      <div class="icon-purpose">Network error</div>
+    </div>
+    <div class="icon-card">
+      <div class="icon-preview">&#9679;</div>
+      <div class="icon-name">link.circle.fill</div>
+      <div class="icon-purpose">GitHub profile</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== COMPONENT LIBRARY ====== -->
+<div class="section">
+  <div class="section-title">Component Library</div>
+  <div class="section-desc">All components shown in both light and dark variants. Built with UIKit programmatic layout (no storyboards).</div>
+
+  <div class="component-grid">
+
+    <!-- UserCard -->
+    <div class="component-card">
+      <div class="component-header">
+        <span class="component-name">UserCard</span>
+        <span class="component-tag">UITableViewCell</span>
+      </div>
+      <div class="component-preview">
+        <div class="preview-split">
+          <div class="preview-light">
+            <div class="prev-user-cell">
+              <div class="prev-avatar" style="background:linear-gradient(135deg,#f0883e,#da3633);">M</div>
+              <div class="prev-cell-text">
+                <div class="prev-username-light">mojombo</div>
+                <div class="prev-url-light">github.com/mojombo</div>
+              </div>
+              <div class="prev-disclosure-light">&#8250;</div>
+            </div>
+            <div class="prev-separator-light"></div>
+            <div class="prev-user-cell">
+              <div class="prev-avatar" style="background:linear-gradient(135deg,#3fb950,#238636);">D</div>
+              <div class="prev-cell-text">
+                <div class="prev-username-light">defunkt</div>
+                <div class="prev-url-light">github.com/defunkt</div>
+              </div>
+              <div class="prev-disclosure-light">&#8250;</div>
+            </div>
+          </div>
+          <div class="preview-dark">
+            <div class="prev-user-cell">
+              <div class="prev-avatar" style="background:linear-gradient(135deg,#f0883e,#da3633);">M</div>
+              <div class="prev-cell-text">
+                <div class="prev-username-dark">mojombo</div>
+                <div class="prev-url-dark">github.com/mojombo</div>
+              </div>
+              <div class="prev-disclosure-dark">&#8250;</div>
+            </div>
+            <div class="prev-separator-dark"></div>
+            <div class="prev-user-cell">
+              <div class="prev-avatar" style="background:linear-gradient(135deg,#3fb950,#238636);">D</div>
+              <div class="prev-cell-text">
+                <div class="prev-username-dark">defunkt</div>
+                <div class="prev-url-dark">github.com/defunkt</div>
+              </div>
+              <div class="prev-disclosure-dark">&#8250;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- StatsRow -->
+    <div class="component-card">
+      <div class="component-header">
+        <span class="component-name">StatsRow</span>
+        <span class="component-tag">UIView</span>
+      </div>
+      <div class="component-preview">
+        <div class="preview-split">
+          <div class="preview-light">
+            <div class="prev-stats-container">
+              <div class="prev-stats-row prev-stats-row-light">
+                <div class="prev-stat">
+                  <div class="prev-stat-icon prev-stat-icon-light">&#128101;</div>
+                  <div class="prev-stat-num prev-stat-num-light">23,847</div>
+                  <div class="prev-stat-label prev-stat-label-light">Followers</div>
+                </div>
+                <div class="prev-stats-divider prev-stats-divider-light"></div>
+                <div class="prev-stat">
+                  <div class="prev-stat-icon prev-stat-icon-light">&#128100;+</div>
+                  <div class="prev-stat-num prev-stat-num-light">11</div>
+                  <div class="prev-stat-label prev-stat-label-light">Following</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="preview-dark">
+            <div class="prev-stats-container">
+              <div class="prev-stats-row prev-stats-row-dark">
+                <div class="prev-stat">
+                  <div class="prev-stat-icon prev-stat-icon-dark">&#128101;</div>
+                  <div class="prev-stat-num prev-stat-num-dark">23,847</div>
+                  <div class="prev-stat-label prev-stat-label-dark">Followers</div>
+                </div>
+                <div class="prev-stats-divider prev-stats-divider-dark"></div>
+                <div class="prev-stat">
+                  <div class="prev-stat-icon prev-stat-icon-dark">&#128100;+</div>
+                  <div class="prev-stat-num prev-stat-num-dark">11</div>
+                  <div class="prev-stat-label prev-stat-label-dark">Following</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Rows -->
+    <div class="component-card">
+      <div class="component-header">
+        <span class="component-name">InfoRow (Location + Blog)</span>
+        <span class="component-tag">UIView</span>
+      </div>
+      <div class="component-preview">
+        <div class="preview-split">
+          <div class="preview-light">
+            <div>
+              <div class="prev-info-row">
+                <div class="prev-info-icon prev-info-icon-light">&#128205;</div>
+                <div class="prev-info-text prev-info-text-light">San Francisco, CA</div>
+              </div>
+              <div class="prev-info-separator-light"></div>
+              <div class="prev-info-row">
+                <div class="prev-info-icon prev-info-icon-light">&#128279;</div>
+                <div class="prev-info-text prev-info-link-light">tom.preston-werner.com</div>
+              </div>
+            </div>
+          </div>
+          <div class="preview-dark">
+            <div>
+              <div class="prev-info-row">
+                <div class="prev-info-icon prev-info-icon-dark">&#128205;</div>
+                <div class="prev-info-text prev-info-text-dark">San Francisco, CA</div>
+              </div>
+              <div class="prev-info-separator-dark"></div>
+              <div class="prev-info-row">
+                <div class="prev-info-icon prev-info-icon-dark">&#128279;</div>
+                <div class="prev-info-text prev-info-link-dark">tom.preston-werner.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GitHub Button -->
+    <div class="component-card">
+      <div class="component-header">
+        <span class="component-name">GitHub Profile Button</span>
+        <span class="component-tag">UIButton</span>
+      </div>
+      <div class="component-preview">
+        <div class="preview-split">
+          <div class="preview-light">
+            <div class="prev-gh-btn-wrap">
+              <button class="prev-gh-btn prev-gh-btn-light">
+                <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+                View on GitHub
+              </button>
+            </div>
+          </div>
+          <div class="preview-dark">
+            <div class="prev-gh-btn-wrap">
+              <button class="prev-gh-btn prev-gh-btn-dark">
+                <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+                View on GitHub
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ErrorView -->
+    <div class="component-card">
+      <div class="component-header">
+        <span class="component-name">ErrorView</span>
+        <span class="component-tag">UIView</span>
+      </div>
+      <div class="component-preview">
+        <div class="preview-split">
+          <div class="preview-light">
+            <div class="prev-error">
+              <div class="prev-error-icon prev-error-icon-light">&#9888;</div>
+              <div class="prev-error-title prev-error-title-light">Something Went Wrong</div>
+              <div class="prev-error-msg prev-error-msg-light">Check your connection and try again.</div>
+              <button class="prev-retry-btn prev-retry-btn-light">Try Again</button>
+            </div>
+          </div>
+          <div class="preview-dark">
+            <div class="prev-error">
+              <div class="prev-error-icon prev-error-icon-dark">&#9888;</div>
+              <div class="prev-error-title prev-error-title-dark">Something Went Wrong</div>
+              <div class="prev-error-msg prev-error-msg-dark">Check your connection and try again.</div>
+              <button class="prev-retry-btn prev-retry-btn-dark">Try Again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EmptyStateView -->
+    <div class="component-card">
+      <div class="component-header">
+        <span class="component-name">EmptyStateView</span>
+        <span class="component-tag">UIView</span>
+      </div>
+      <div class="component-preview">
+        <div class="preview-split">
+          <div class="preview-light">
+            <div class="prev-empty">
+              <div class="prev-empty-icon">&#128100;</div>
+              <div class="prev-empty-title prev-empty-title-light">No Users Found</div>
+              <div class="prev-empty-msg prev-empty-msg-light">Pull down to refresh.</div>
+            </div>
+          </div>
+          <div class="preview-dark">
+            <div class="prev-empty">
+              <div class="prev-empty-icon">&#128100;</div>
+              <div class="prev-empty-title prev-empty-title-dark">No Users Found</div>
+              <div class="prev-empty-msg prev-empty-msg-dark">Pull down to refresh.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LoadingView -->
+    <div class="component-card">
+      <div class="component-header">
+        <span class="component-name">LoadingView</span>
+        <span class="component-tag">UIActivityIndicatorView</span>
+      </div>
+      <div class="component-preview">
+        <div class="preview-split">
+          <div class="preview-light">
+            <div class="prev-loading">
+              <div class="prev-spinner"></div>
+              <div style="font-size:13px;color:#656D76;">Loading...</div>
+            </div>
+          </div>
+          <div class="preview-dark">
+            <div class="prev-loading">
+              <div class="prev-spinner prev-spinner-dark"></div>
+              <div style="font-size:13px;color:#8B949E;">Loading...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeleton Cell -->
+    <div class="component-card">
+      <div class="component-header">
+        <span class="component-name">SkeletonCell</span>
+        <span class="component-tag">UITableViewCell</span>
+      </div>
+      <div class="component-preview">
+        <div class="preview-split">
+          <div class="preview-light">
+            <div style="padding:12px 16px;display:flex;align-items:center;">
+              <div style="width:48px;height:48px;border-radius:24px;background:#E1E4E8;flex-shrink:0;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,#F6F8FA,transparent);animation:shimmer 1.5s infinite;"></div>
+              </div>
+              <div style="margin-left:12px;display:flex;flex-direction:column;gap:8px;">
+                <div style="width:100px;height:14px;border-radius:4px;background:#E1E4E8;position:relative;overflow:hidden;">
+                  <div style="position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,#F6F8FA,transparent);animation:shimmer 1.5s infinite;"></div>
+                </div>
+                <div style="width:180px;height:14px;border-radius:4px;background:#E1E4E8;position:relative;overflow:hidden;">
+                  <div style="position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,#F6F8FA,transparent);animation:shimmer 1.5s infinite;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="preview-dark">
+            <div style="padding:12px 16px;display:flex;align-items:center;">
+              <div style="width:48px;height:48px;border-radius:24px;background:#21262D;flex-shrink:0;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,#30363D,transparent);animation:shimmer 1.5s infinite;"></div>
+              </div>
+              <div style="margin-left:12px;display:flex;flex-direction:column;gap:8px;">
+                <div style="width:100px;height:14px;border-radius:4px;background:#21262D;position:relative;overflow:hidden;">
+                  <div style="position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,#30363D,transparent);animation:shimmer 1.5s infinite;"></div>
+                </div>
+                <div style="width:180px;height:14px;border-radius:4px;background:#21262D;position:relative;overflow:hidden;">
+                  <div style="position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,#30363D,transparent);animation:shimmer 1.5s infinite;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

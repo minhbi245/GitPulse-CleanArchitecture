@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitPulse - User List Screen Wireframe</title>
+<style>
+  :root {
+    /* Light Mode */
+    --bg: #FFFFFF;
+    --bg-secondary: #F6F8FA;
+    --surface: #FFFFFF;
+    --surface-border: #D0D7DE;
+    --text-primary: #1F2328;
+    --text-secondary: #656D76;
+    --text-tertiary: #818B98;
+    --primary: #0969DA;
+    --primary-light: #DDF4FF;
+    --error: #CF222E;
+    --error-bg: #FFEBE9;
+    --separator: #D8DEE4;
+    --shadow: rgba(31, 35, 40, 0.06);
+    --shadow-md: rgba(31, 35, 40, 0.10);
+    --status-bar-bg: #F6F8FA;
+    --nav-bar-bg: #F6F8FA;
+    --nav-bar-border: #D0D7DE;
+    --highlight: rgba(9, 105, 218, 0.06);
+    --skeleton-base: #E1E4E8;
+    --skeleton-shine: #F6F8FA;
+  }
+
+  .dark {
+    --bg: #0D1117;
+    --bg-secondary: #161B22;
+    --surface: #21262D;
+    --surface-border: #30363D;
+    --text-primary: #E6EDF3;
+    --text-secondary: #8B949E;
+    --text-tertiary: #6E7681;
+    --primary: #58A6FF;
+    --primary-light: #0D1117;
+    --error: #F85149;
+    --error-bg: rgba(248, 81, 73, 0.1);
+    --separator: #21262D;
+    --shadow: rgba(0, 0, 0, 0.2);
+    --shadow-md: rgba(0, 0, 0, 0.3);
+    --status-bar-bg: #161B22;
+    --nav-bar-bg: #161B22;
+    --nav-bar-border: #30363D;
+    --highlight: rgba(88, 166, 255, 0.08);
+    --skeleton-base: #21262D;
+    --skeleton-shine: #30363D;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+    background: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+    color: #E6EDF3;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+    letter-spacing: -0.5px;
+  }
+
+  .page-subtitle {
+    font-size: 15px;
+    color: #8B949E;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .controls button {
+    padding: 8px 20px;
+    border: 1px solid #30363D;
+    border-radius: 8px;
+    background: #21262D;
+    color: #E6EDF3;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .controls button:hover { background: #30363D; }
+  .controls button.active {
+    background: #0969DA;
+    border-color: #0969DA;
+    color: #fff;
+  }
+
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 10px 18px;
+    border: 1px solid #30363D;
+    border-radius: 10px;
+    background: #21262D;
+    color: #E6EDF3;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .theme-toggle:hover { background: #30363D; }
+
+  .phone-container {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .state-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .state-label {
+    font-size: 13px;
+    color: #8B949E;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+
+  /* iPhone 14 Frame */
+  .iphone {
+    width: 390px;
+    height: 844px;
+    border-radius: 48px;
+    border: 4px solid #3a3a4a;
+    background: var(--bg);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+  }
+
+  /* Dynamic Island */
+  .dynamic-island {
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 37px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 100;
+  }
+
+  /* Status Bar */
+  .status-bar {
+    height: 59px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 30px 8px;
+    background: var(--nav-bar-bg);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .status-bar .time { font-size: 16px; font-weight: 700; }
+  .status-icons { display: flex; gap: 6px; align-items: center; font-size: 13px; }
+  .status-icons .dot { width: 4px; height: 4px; background: var(--text-primary); border-radius: 50%; }
+
+  /* Signal bars */
+  .signal { display: flex; gap: 1.5px; align-items: flex-end; height: 12px; }
+  .signal span { width: 3px; background: var(--text-primary); border-radius: 1px; }
+  .signal span:nth-child(1) { height: 4px; }
+  .signal span:nth-child(2) { height: 6px; }
+  .signal span:nth-child(3) { height: 8px; }
+  .signal span:nth-child(4) { height: 11px; }
+
+  /* Battery */
+  .battery {
+    width: 27px; height: 12px;
+    border: 1.5px solid var(--text-primary);
+    border-radius: 3px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+  }
+  .battery::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    width: 2px;
+    height: 5px;
+    background: var(--text-primary);
+    border-radius: 0 1px 1px 0;
+  }
+  .battery-fill {
+    width: 80%;
+    height: 100%;
+    background: var(--text-primary);
+    border-radius: 1px;
+  }
+
+  /* Navigation Bar - Large Title */
+  .nav-bar-large {
+    background: var(--nav-bar-bg);
+    padding: 0 16px 12px;
+  }
+
+  .nav-bar-large .large-title {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.37px;
+  }
+
+  /* Screen Content Area */
+  .screen-content {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--bg);
+  }
+
+  .screen-body {
+    display: flex;
+    flex-direction: column;
+    height: calc(844px - 59px);
+  }
+
+  /* Pull to Refresh */
+  .pull-refresh {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    background: var(--bg);
+  }
+
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid var(--separator);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* User List */
+  .user-list {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .user-cell {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 0.5px solid var(--separator);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .user-cell:hover { background: var(--highlight); }
+
+  .user-cell:last-child { border-bottom: none; }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    border: 0.5px solid var(--surface-border);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cell-content {
+    flex: 1;
+    margin-left: 12px;
+    min-width: 0;
+  }
+
+  .username {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 22px;
+  }
+
+  .user-url {
+    font-size: 15px;
+    color: var(--primary);
+    line-height: 20px;
+    margin-top: 2px;
+    text-decoration: underline;
+    text-decoration-color: rgba(9, 105, 218, 0.3);
+    text-underline-offset: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dark .user-url {
+    text-decoration-color: rgba(88, 166, 255, 0.3);
+  }
+
+  .disclosure {
+    color: var(--text-tertiary);
+    font-size: 14px;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Loading Footer */
+  .loading-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    gap: 10px;
+    border-top: 0.5px solid var(--separator);
+  }
+
+  .loading-footer .spinner-small {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--separator);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .loading-footer span {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  /* Error Footer */
+  .error-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    gap: 10px;
+    border-top: 0.5px solid var(--separator);
+  }
+
+  .error-footer .error-text {
+    font-size: 13px;
+    color: var(--error);
+  }
+
+  .retry-btn-small {
+    padding: 6px 16px;
+    background: transparent;
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  /* Full Screen Error */
+  .error-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    text-align: center;
+  }
+
+  .error-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: var(--error);
+    opacity: 0.8;
+  }
+
+  .error-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .error-message {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 24px;
+    max-width: 260px;
+  }
+
+  .retry-btn {
+    padding: 12px 40px;
+    background: var(--primary);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    min-width: 200px;
+    transition: opacity 0.15s;
+  }
+
+  .retry-btn:hover { opacity: 0.85; }
+
+  /* Empty State */
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    text-align: center;
+  }
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: var(--text-tertiary);
+    opacity: 0.6;
+  }
+
+  .empty-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .empty-message {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  /* Loading Skeleton */
+  .skeleton-cell {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 0.5px solid var(--separator);
+  }
+
+  .skeleton-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    background: var(--skeleton-base);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-line {
+    height: 14px;
+    border-radius: 4px;
+    background: var(--skeleton-base);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-line.short { width: 100px; }
+  .skeleton-line.medium { width: 180px; }
+  .skeleton-line.long { width: 220px; }
+
+  .skeleton-avatar::after,
+  .skeleton-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--skeleton-shine), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer { to { left: 100%; } }
+
+  .skeleton-text {
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Home Indicator */
+  .home-indicator {
+    height: 34px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 8px;
+    background: var(--bg);
+  }
+
+  .home-indicator-bar {
+    width: 134px;
+    height: 5px;
+    background: var(--text-primary);
+    border-radius: 3px;
+    opacity: 0.2;
+  }
+
+  /* Annotation Notes */
+  .annotation {
+    position: relative;
+    margin-top: 16px;
+    background: #161B22;
+    border: 1px solid #30363D;
+    border-radius: 8px;
+    padding: 12px 16px;
+    max-width: 390px;
+    width: 100%;
+  }
+
+  .annotation-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #58A6FF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .annotation-text {
+    font-size: 13px;
+    color: #8B949E;
+    line-height: 1.5;
+  }
+
+  .annotation-text code {
+    background: #21262D;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #79C0FF;
+  }
+
+  /* Hidden states */
+  .state-hidden { display: none; }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <span id="theme-icon">&#9790;</span>
+  <span id="theme-label">Dark Mode</span>
+</button>
+
+<h1>GitPulse &mdash; User List Screen</h1>
+<p class="page-subtitle">iOS UIKit Wireframe &bull; iPhone 14 (390 &times; 844pt)</p>
+
+<div class="controls">
+  <button class="active" onclick="showState('normal')">Normal</button>
+  <button onclick="showState('loading')">Loading</button>
+  <button onclick="showState('refreshing')">Pull to Refresh</button>
+  <button onclick="showState('pagination')">Load More</button>
+  <button onclick="showState('error-footer')">Pagination Error</button>
+  <button onclick="showState('error')">Full Error</button>
+  <button onclick="showState('empty')">Empty</button>
+</div>
+
+<div class="phone-container">
+
+  <!-- ========= NORMAL STATE ========= -->
+  <div class="state-group" id="state-normal">
+    <div class="state-label">Normal State</div>
+    <div class="iphone" id="phone-main">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <!-- Status Bar -->
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+
+        <!-- Nav Bar Large Title -->
+        <div class="nav-bar-large">
+          <div class="large-title">GitHub Users</div>
+        </div>
+
+        <!-- User List -->
+        <div class="screen-content" id="content-area">
+          <div class="user-list" id="user-list-normal">
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #f0883e, #da3633);">M</div>
+              <div class="cell-content">
+                <div class="username">mojombo</div>
+                <div class="user-url">github.com/mojombo</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #3fb950, #238636);">D</div>
+              <div class="cell-content">
+                <div class="username">defunkt</div>
+                <div class="user-url">github.com/defunkt</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #a371f7, #8957e5);">P</div>
+              <div class="cell-content">
+                <div class="username">pjhyett</div>
+                <div class="user-url">github.com/pjhyett</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #58a6ff, #0969da);">W</div>
+              <div class="cell-content">
+                <div class="username">wycats</div>
+                <div class="user-url">github.com/wycats</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #f778ba, #d2a8ff);">E</div>
+              <div class="cell-content">
+                <div class="username">ezmobius</div>
+                <div class="user-url">github.com/ezmobius</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #79c0ff, #388bfd);">I</div>
+              <div class="cell-content">
+                <div class="username">ivey</div>
+                <div class="user-url">github.com/ivey</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #ffd33d, #e3b341);">E</div>
+              <div class="cell-content">
+                <div class="username">evanphx</div>
+                <div class="user-url">github.com/evanphx</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #3fb950, #1f6feb);">V</div>
+              <div class="cell-content">
+                <div class="username">vanpelt</div>
+                <div class="user-url">github.com/vanpelt</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Home Indicator -->
+        <div class="home-indicator">
+          <div class="home-indicator-bar"></div>
+        </div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        <code>UITableView</code> with <code>.plain</code> style. Large title collapses on scroll.
+        Separator inset = 76pt left (avatar 48 + padding 16 + gap 12). Disclosure indicator as accessory.
+        Avatar: 48pt circle with gradient placeholder until image loads.
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= LOADING STATE ========= -->
+  <div class="state-group state-hidden" id="state-loading">
+    <div class="state-label">Loading (Skeleton)</div>
+    <div class="iphone">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div class="nav-bar-large">
+          <div class="large-title">GitHub Users</div>
+        </div>
+        <div class="screen-content">
+          <div class="user-list">
+            <div class="skeleton-cell"><div class="skeleton-avatar"></div><div class="skeleton-text"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div></div></div>
+            <div class="skeleton-cell"><div class="skeleton-avatar"></div><div class="skeleton-text"><div class="skeleton-line medium"></div><div class="skeleton-line long"></div></div></div>
+            <div class="skeleton-cell"><div class="skeleton-avatar"></div><div class="skeleton-text"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>
+            <div class="skeleton-cell"><div class="skeleton-avatar"></div><div class="skeleton-text"><div class="skeleton-line medium"></div><div class="skeleton-line medium"></div></div></div>
+            <div class="skeleton-cell"><div class="skeleton-avatar"></div><div class="skeleton-text"><div class="skeleton-line short"></div><div class="skeleton-line long"></div></div></div>
+            <div class="skeleton-cell"><div class="skeleton-avatar"></div><div class="skeleton-text"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
+            <div class="skeleton-cell"><div class="skeleton-avatar"></div><div class="skeleton-text"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div></div></div>
+            <div class="skeleton-cell"><div class="skeleton-avatar"></div><div class="skeleton-text"><div class="skeleton-line long"></div><div class="skeleton-line medium"></div></div></div>
+          </div>
+        </div>
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        Skeleton shimmer animation (1.5s linear infinite). Gradient sweeps left-to-right.
+        Matches exact cell layout: 48pt circle + two text lines. Provides perceived performance.
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= PULL TO REFRESH STATE ========= -->
+  <div class="state-group state-hidden" id="state-refreshing">
+    <div class="state-label">Pull to Refresh</div>
+    <div class="iphone">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div class="nav-bar-large">
+          <div class="large-title">GitHub Users</div>
+        </div>
+        <div class="screen-content">
+          <div class="pull-refresh">
+            <div class="spinner"></div>
+          </div>
+          <div class="user-list">
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #f0883e, #da3633);">M</div>
+              <div class="cell-content">
+                <div class="username">mojombo</div>
+                <div class="user-url">github.com/mojombo</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #3fb950, #238636);">D</div>
+              <div class="cell-content">
+                <div class="username">defunkt</div>
+                <div class="user-url">github.com/defunkt</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #a371f7, #8957e5);">P</div>
+              <div class="cell-content">
+                <div class="username">pjhyett</div>
+                <div class="user-url">github.com/pjhyett</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #58a6ff, #0969da);">W</div>
+              <div class="cell-content">
+                <div class="username">wycats</div>
+                <div class="user-url">github.com/wycats</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #f778ba, #d2a8ff);">E</div>
+              <div class="cell-content">
+                <div class="username">ezmobius</div>
+                <div class="user-url">github.com/ezmobius</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #79c0ff, #388bfd);">I</div>
+              <div class="cell-content">
+                <div class="username">ivey</div>
+                <div class="user-url">github.com/ivey</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #ffd33d, #e3b341);">E</div>
+              <div class="cell-content">
+                <div class="username">evanphx</div>
+                <div class="user-url">github.com/evanphx</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+          </div>
+        </div>
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        Standard <code>UIRefreshControl</code>. Tint color = <code>Colors/primary</code>.
+        Appears above content when user pulls down. Existing list stays visible beneath.
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= LOAD MORE (PAGINATION) STATE ========= -->
+  <div class="state-group state-hidden" id="state-pagination">
+    <div class="state-label">Pagination Loading</div>
+    <div class="iphone">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div class="nav-bar-large" style="padding-bottom:8px;">
+          <div style="font-size:17px; font-weight:600; color:var(--text-primary);">GitHub Users</div>
+        </div>
+        <div class="screen-content">
+          <div class="user-list">
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #3fb950, #1f6feb);">V</div>
+              <div class="cell-content">
+                <div class="username">vanpelt</div>
+                <div class="user-url">github.com/vanpelt</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #f0883e, #da3633);">A</div>
+              <div class="cell-content">
+                <div class="username">anotherjesse</div>
+                <div class="user-url">github.com/anotherjesse</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #79c0ff, #388bfd);">R</div>
+              <div class="cell-content">
+                <div class="username">rubyist</div>
+                <div class="user-url">github.com/rubyist</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #a371f7, #8957e5);">M</div>
+              <div class="cell-content">
+                <div class="username">mojodna</div>
+                <div class="user-url">github.com/mojodna</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #ffd33d, #e3b341);">B</div>
+              <div class="cell-content">
+                <div class="username">bmizerany</div>
+                <div class="user-url">github.com/bmizerany</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #f778ba, #d2a8ff);">S</div>
+              <div class="cell-content">
+                <div class="username">SophieDeBenworthy</div>
+                <div class="user-url">github.com/SophieDeBe...</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+          </div>
+          <div class="loading-footer">
+            <div class="spinner-small"></div>
+            <span>Loading more...</span>
+          </div>
+        </div>
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        Table footer view with <code>UIActivityIndicatorView(.medium)</code>.
+        Triggered when scrolling near bottom (threshold: ~200pt from end).
+        Nav title collapsed (inline) since list is scrolled. 20 items per page.
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= ERROR FOOTER STATE ========= -->
+  <div class="state-group state-hidden" id="state-error-footer">
+    <div class="state-label">Pagination Error</div>
+    <div class="iphone">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div class="nav-bar-large" style="padding-bottom:8px;">
+          <div style="font-size:17px; font-weight:600; color:var(--text-primary);">GitHub Users</div>
+        </div>
+        <div class="screen-content">
+          <div class="user-list">
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #3fb950, #1f6feb);">V</div>
+              <div class="cell-content">
+                <div class="username">vanpelt</div>
+                <div class="user-url">github.com/vanpelt</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #f0883e, #da3633);">A</div>
+              <div class="cell-content">
+                <div class="username">anotherjesse</div>
+                <div class="user-url">github.com/anotherjesse</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #79c0ff, #388bfd);">R</div>
+              <div class="cell-content">
+                <div class="username">rubyist</div>
+                <div class="user-url">github.com/rubyist</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #a371f7, #8957e5);">M</div>
+              <div class="cell-content">
+                <div class="username">mojodna</div>
+                <div class="user-url">github.com/mojodna</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #ffd33d, #e3b341);">B</div>
+              <div class="cell-content">
+                <div class="username">bmizerany</div>
+                <div class="user-url">github.com/bmizerany</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+            <div class="user-cell">
+              <div class="avatar" style="background: linear-gradient(135deg, #f778ba, #d2a8ff);">S</div>
+              <div class="cell-content">
+                <div class="username">SophieDeBenworthy</div>
+                <div class="user-url">github.com/SophieDeBe...</div>
+              </div>
+              <div class="disclosure">&#8250;</div>
+            </div>
+          </div>
+          <div class="error-footer">
+            <div class="error-text">Failed to load more users</div>
+            <button class="retry-btn-small">Try Again</button>
+          </div>
+        </div>
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        Error shown in table footer. Existing data preserved. "Try Again" button retries
+        the failed page request. Uses <code>Colors/error</code> for error text.
+        Border-style button with <code>Colors/primary</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= FULL ERROR STATE ========= -->
+  <div class="state-group state-hidden" id="state-error">
+    <div class="state-label">Full Screen Error</div>
+    <div class="iphone">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div class="nav-bar-large">
+          <div class="large-title">GitHub Users</div>
+        </div>
+        <div class="screen-content" style="display:flex;">
+          <div class="error-state">
+            <div class="error-icon">&#9888;</div>
+            <div class="error-title">Something Went Wrong</div>
+            <div class="error-message">We couldn't load the users list. Check your internet connection and try again.</div>
+            <button class="retry-btn">Try Again</button>
+          </div>
+        </div>
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        Full-screen error when initial load fails and no cached data. SF Symbol
+        <code>exclamationmark.triangle.fill</code> at 48pt. Retry button: primary background,
+        10pt corner radius, 44pt min height. Also supports pull-to-refresh to retry.
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= EMPTY STATE ========= -->
+  <div class="state-group state-hidden" id="state-empty">
+    <div class="state-label">Empty State</div>
+    <div class="iphone">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div class="nav-bar-large">
+          <div class="large-title">GitHub Users</div>
+        </div>
+        <div class="screen-content" style="display:flex;">
+          <div class="empty-state">
+            <div class="empty-icon">&#128100;</div>
+            <div class="empty-title">No Users Found</div>
+            <div class="empty-message">Pull down to refresh the list and try loading users again.</div>
+          </div>
+        </div>
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        Centered illustration with SF Symbol
+        <code>person.crop.circle.badge.questionmark</code> at 48pt. Tertiary color with 0.6 opacity.
+        Pull-to-refresh still active for retry. No button needed.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let isDark = false;
+
+  function toggleTheme() {
+    isDark = !isDark;
+    document.querySelectorAll('.iphone').forEach(el => {
+      el.classList.toggle('dark', isDark);
+    });
+    document.getElementById('theme-icon').textContent = isDark ? '\u2600' : '\u263E';
+    document.getElementById('theme-label').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+  }
+
+  function showState(state) {
+    const states = ['normal', 'loading', 'refreshing', 'pagination', 'error-footer', 'error', 'empty'];
+    states.forEach(s => {
+      const el = document.getElementById('state-' + s);
+      if (el) {
+        el.classList.toggle('state-hidden', s !== state);
+      }
+    });
+    document.querySelectorAll('.controls button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

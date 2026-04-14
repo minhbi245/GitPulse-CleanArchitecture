@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitPulse - User Details Screen Wireframe</title>
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --bg-secondary: #F6F8FA;
+    --surface: #FFFFFF;
+    --surface-border: #D0D7DE;
+    --text-primary: #1F2328;
+    --text-secondary: #656D76;
+    --text-tertiary: #818B98;
+    --primary: #0969DA;
+    --primary-light: #DDF4FF;
+    --error: #CF222E;
+    --separator: #D8DEE4;
+    --shadow: rgba(31, 35, 40, 0.06);
+    --shadow-md: rgba(31, 35, 40, 0.10);
+    --status-bar-bg: #F6F8FA;
+    --nav-bar-bg: #F6F8FA;
+    --nav-bar-border: #D0D7DE;
+    --skeleton-base: #E1E4E8;
+    --skeleton-shine: #F6F8FA;
+    --avatar-shadow: rgba(31, 35, 40, 0.12);
+    --stats-bg: #F6F8FA;
+    --btn-secondary-bg: #F6F8FA;
+    --btn-secondary-border: #D0D7DE;
+  }
+
+  .dark {
+    --bg: #0D1117;
+    --bg-secondary: #161B22;
+    --surface: #21262D;
+    --surface-border: #30363D;
+    --text-primary: #E6EDF3;
+    --text-secondary: #8B949E;
+    --text-tertiary: #6E7681;
+    --primary: #58A6FF;
+    --primary-light: #0D1117;
+    --error: #F85149;
+    --separator: #21262D;
+    --shadow: rgba(0, 0, 0, 0.2);
+    --shadow-md: rgba(0, 0, 0, 0.3);
+    --status-bar-bg: #161B22;
+    --nav-bar-bg: #161B22;
+    --nav-bar-border: #30363D;
+    --skeleton-base: #21262D;
+    --skeleton-shine: #30363D;
+    --avatar-shadow: rgba(0, 0, 0, 0.4);
+    --stats-bg: #161B22;
+    --btn-secondary-bg: #21262D;
+    --btn-secondary-border: #30363D;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+    background: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+    color: #E6EDF3;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+    letter-spacing: -0.5px;
+  }
+
+  .page-subtitle {
+    font-size: 15px;
+    color: #8B949E;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .controls button {
+    padding: 8px 20px;
+    border: 1px solid #30363D;
+    border-radius: 8px;
+    background: #21262D;
+    color: #E6EDF3;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .controls button:hover { background: #30363D; }
+  .controls button.active {
+    background: #0969DA;
+    border-color: #0969DA;
+    color: #fff;
+  }
+
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 10px 18px;
+    border: 1px solid #30363D;
+    border-radius: 10px;
+    background: #21262D;
+    color: #E6EDF3;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .theme-toggle:hover { background: #30363D; }
+
+  .phone-container {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .state-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .state-label {
+    font-size: 13px;
+    color: #8B949E;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+
+  /* iPhone 14 Frame */
+  .iphone {
+    width: 390px;
+    height: 844px;
+    border-radius: 48px;
+    border: 4px solid #3a3a4a;
+    background: var(--bg);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+  }
+
+  .dynamic-island {
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 37px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 100;
+  }
+
+  /* Status Bar */
+  .status-bar {
+    height: 59px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 30px 8px;
+    background: var(--nav-bar-bg);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .status-bar .time { font-size: 16px; font-weight: 700; }
+  .status-icons { display: flex; gap: 6px; align-items: center; font-size: 13px; }
+
+  .signal { display: flex; gap: 1.5px; align-items: flex-end; height: 12px; }
+  .signal span { width: 3px; background: var(--text-primary); border-radius: 1px; }
+  .signal span:nth-child(1) { height: 4px; }
+  .signal span:nth-child(2) { height: 6px; }
+  .signal span:nth-child(3) { height: 8px; }
+  .signal span:nth-child(4) { height: 11px; }
+
+  .battery {
+    width: 27px; height: 12px;
+    border: 1.5px solid var(--text-primary);
+    border-radius: 3px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+  }
+  .battery::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    width: 2px;
+    height: 5px;
+    background: var(--text-primary);
+    border-radius: 0 1px 1px 0;
+  }
+  .battery-fill {
+    width: 80%;
+    height: 100%;
+    background: var(--text-primary);
+    border-radius: 1px;
+  }
+
+  /* Navigation Bar - Inline Title with Back */
+  .nav-bar-inline {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    background: var(--nav-bar-bg);
+    border-bottom: 0.5px solid var(--nav-bar-border);
+    position: relative;
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--primary);
+    font-size: 17px;
+    font-weight: 400;
+    cursor: pointer;
+    padding: 8px;
+    border: none;
+    background: none;
+    font-family: inherit;
+  }
+
+  .back-chevron {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .nav-title-inline {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  /* Screen Content */
+  .screen-body {
+    display: flex;
+    flex-direction: column;
+    height: calc(844px - 0px);
+  }
+
+  .screen-content {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--bg);
+  }
+
+  /* Profile Header */
+  .profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 0;
+  }
+
+  .avatar-large {
+    width: 96px;
+    height: 96px;
+    border-radius: 48px;
+    background: linear-gradient(135deg, #58a6ff, #0969da);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 600;
+    color: #fff;
+    border: 3px solid var(--surface-border);
+    box-shadow: 0 2px 12px var(--avatar-shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-large .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 48px;
+  }
+
+  .profile-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  .profile-login {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  /* Stats Row */
+  .stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+    gap: 0;
+    background: var(--stats-bg);
+    border-radius: 12px;
+    padding: 16px 32px;
+    width: calc(100% - 32px);
+    max-width: 320px;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    gap: 2px;
+  }
+
+  .stat-icon-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+  }
+
+  .stat-icon {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .stat-number {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .stats-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--separator);
+    margin: 0 24px;
+    flex-shrink: 0;
+  }
+
+  /* Info Section */
+  .info-section {
+    padding: 24px 16px 0;
+    width: 100%;
+  }
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 0.5px solid var(--separator);
+    gap: 12px;
+  }
+
+  .info-row:last-child { border-bottom: none; }
+
+  .info-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--stats-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  .info-text {
+    flex: 1;
+    font-size: 17px;
+    color: var(--text-primary);
+    line-height: 22px;
+  }
+
+  .info-link {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-color: rgba(9, 105, 218, 0.3);
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+
+  .dark .info-link {
+    text-decoration-color: rgba(88, 166, 255, 0.3);
+  }
+
+  .info-external {
+    color: var(--text-tertiary);
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  /* GitHub Button */
+  .github-btn-container {
+    padding: 24px 16px 16px;
+  }
+
+  .github-btn {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--text-primary);
+    border: none;
+    border-radius: 12px;
+    color: var(--bg);
+    font-size: 17px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .github-btn:hover { opacity: 0.85; }
+
+  .github-btn .gh-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* GitHub SVG icon */
+  .gh-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--bg);
+  }
+
+  /* Home Indicator */
+  .home-indicator {
+    height: 34px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 8px;
+    background: var(--bg);
+  }
+
+  .home-indicator-bar {
+    width: 134px;
+    height: 5px;
+    background: var(--text-primary);
+    border-radius: 3px;
+    opacity: 0.2;
+  }
+
+  /* Loading State */
+  .loading-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 32px;
+  }
+
+  .skeleton-circle {
+    width: 96px;
+    height: 96px;
+    border-radius: 48px;
+    background: var(--skeleton-base);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-rect {
+    height: 16px;
+    border-radius: 4px;
+    background: var(--skeleton-base);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-rect.w-120 { width: 120px; }
+  .skeleton-rect.w-80 { width: 80px; }
+  .skeleton-rect.w-160 { width: 160px; }
+  .skeleton-rect.w-200 { width: 200px; }
+  .skeleton-rect.w-full { width: calc(100% - 32px); max-width: 320px; height: 60px; border-radius: 12px; }
+  .skeleton-rect.h-12 { height: 12px; }
+  .skeleton-rect.h-20 { height: 20px; }
+
+  .skeleton-circle::after,
+  .skeleton-rect::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--skeleton-shine), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer { to { left: 100%; } }
+
+  .skeleton-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Error State */
+  .error-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    text-align: center;
+  }
+
+  .error-icon { font-size: 48px; margin-bottom: 16px; color: var(--error); opacity: 0.8; }
+  .error-title { font-size: 17px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+  .error-message { font-size: 15px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 24px; max-width: 260px; }
+
+  .retry-btn {
+    padding: 12px 40px;
+    background: var(--primary);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    min-width: 200px;
+    transition: opacity 0.15s;
+  }
+  .retry-btn:hover { opacity: 0.85; }
+
+  /* Annotation Notes */
+  .annotation {
+    position: relative;
+    margin-top: 16px;
+    background: #161B22;
+    border: 1px solid #30363D;
+    border-radius: 8px;
+    padding: 12px 16px;
+    max-width: 390px;
+    width: 100%;
+  }
+
+  .annotation-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #58A6FF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .annotation-text {
+    font-size: 13px;
+    color: #8B949E;
+    line-height: 1.5;
+  }
+
+  .annotation-text code {
+    background: #21262D;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #79C0FF;
+  }
+
+  .state-hidden { display: none; }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <span id="theme-icon">&#9790;</span>
+  <span id="theme-label">Dark Mode</span>
+</button>
+
+<h1>GitPulse &mdash; User Details Screen</h1>
+<p class="page-subtitle">iOS UIKit Wireframe &bull; iPhone 14 (390 &times; 844pt)</p>
+
+<div class="controls">
+  <button class="active" onclick="showState('normal')">Normal</button>
+  <button onclick="showState('loading')">Loading</button>
+  <button onclick="showState('error')">Error</button>
+  <button onclick="showState('minimal')">Minimal Data</button>
+</div>
+
+<div class="phone-container">
+
+  <!-- ========= NORMAL STATE ========= -->
+  <div class="state-group" id="state-normal">
+    <div class="state-label">Full Profile</div>
+    <div class="iphone" id="phone-main">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+
+        <div class="nav-bar-inline">
+          <button class="back-btn">
+            <span class="back-chevron">&#8249;</span>
+            <span>Back</span>
+          </button>
+          <span class="nav-title-inline">User Details</span>
+        </div>
+
+        <div class="screen-content">
+          <!-- Profile Header -->
+          <div class="profile-header">
+            <div class="avatar-large">
+              <span>M</span>
+            </div>
+            <div class="profile-name">Tom Preston-Werner</div>
+            <div class="profile-login">@mojombo</div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+              <div class="stat-item">
+                <div class="stat-icon-row">
+                  <span class="stat-icon">&#128101;</span>
+                </div>
+                <div class="stat-number">23,847</div>
+                <div class="stat-label">Followers</div>
+              </div>
+              <div class="stats-divider"></div>
+              <div class="stat-item">
+                <div class="stat-icon-row">
+                  <span class="stat-icon">&#128100;+</span>
+                </div>
+                <div class="stat-number">11</div>
+                <div class="stat-label">Following</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info Rows -->
+          <div class="info-section">
+            <div class="info-row">
+              <div class="info-icon">&#128205;</div>
+              <div class="info-text">San Francisco, CA</div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon">&#128279;</div>
+              <div class="info-text">
+                <span class="info-link">http://tom.preston-werner.com</span>
+              </div>
+              <div class="info-external">&#8599;</div>
+            </div>
+          </div>
+
+          <!-- GitHub Button -->
+          <div class="github-btn-container">
+            <button class="github-btn">
+              <span class="gh-icon">
+                <svg viewBox="0 0 16 16" version="1.1" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+              </span>
+              View on GitHub
+            </button>
+          </div>
+        </div>
+
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        <code>UIScrollView</code> with vertical stack. Avatar: 96pt circle, 3pt border, subtle shadow.
+        Stats row: rounded 12pt container with <code>backgroundSecondary</code> fill.
+        Info rows: icon in 32pt rounded-rect container. Blog link tappable with
+        <code>SFSafariViewController</code>. GitHub button opens profile URL.
+        SF Symbols: <code>person.2.fill</code>, <code>person.badge.plus</code>,
+        <code>mappin.and.ellipse</code>, <code>link</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= LOADING STATE ========= -->
+  <div class="state-group state-hidden" id="state-loading">
+    <div class="state-label">Loading</div>
+    <div class="iphone">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div class="nav-bar-inline">
+          <button class="back-btn">
+            <span class="back-chevron">&#8249;</span>
+            <span>Back</span>
+          </button>
+          <span class="nav-title-inline">User Details</span>
+        </div>
+        <div class="screen-content">
+          <div class="loading-state">
+            <div class="skeleton-circle"></div>
+            <div style="margin-top:16px;"><div class="skeleton-rect w-120"></div></div>
+            <div style="margin-top:8px;"><div class="skeleton-rect w-80 h-12"></div></div>
+            <div style="margin-top:24px;"><div class="skeleton-rect w-full" style="width:290px;"></div></div>
+            <div style="margin-top:24px; width:100%; padding:0 16px;">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:0.5px solid var(--separator);">
+                <div class="skeleton-rect" style="width:32px;height:32px;border-radius:8px;"></div>
+                <div class="skeleton-rect w-160"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:0.5px solid var(--separator);">
+                <div class="skeleton-rect" style="width:32px;height:32px;border-radius:8px;"></div>
+                <div class="skeleton-rect w-200"></div>
+              </div>
+            </div>
+            <div style="margin-top:24px; width:100%; padding:0 16px;">
+              <div class="skeleton-rect" style="width:100%;height:50px;border-radius:12px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        Skeleton layout mirrors final content structure. Shimmer animation 1.5s linear infinite.
+        Nav bar shows immediately. Back button functional during load.
+        Skeleton elements: circle (avatar), rects (name, login, stats, info rows, button).
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= ERROR STATE ========= -->
+  <div class="state-group state-hidden" id="state-error">
+    <div class="state-label">Error</div>
+    <div class="iphone">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div class="nav-bar-inline">
+          <button class="back-btn">
+            <span class="back-chevron">&#8249;</span>
+            <span>Back</span>
+          </button>
+          <span class="nav-title-inline">User Details</span>
+        </div>
+        <div class="screen-content" style="display:flex;">
+          <div class="error-state">
+            <div class="error-icon">&#9888;</div>
+            <div class="error-title">Couldn't Load Profile</div>
+            <div class="error-message">We couldn't load the user profile. Check your internet connection and try again.</div>
+            <button class="retry-btn">Try Again</button>
+          </div>
+        </div>
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        Centered vertically within scroll view area. SF Symbol
+        <code>exclamationmark.triangle.fill</code> at 48pt.
+        Back button remains functional. Retry fetches user details again.
+        If cached data exists, show partial profile instead of full error.
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= MINIMAL DATA STATE ========= -->
+  <div class="state-group state-hidden" id="state-minimal">
+    <div class="state-label">Minimal Data (Offline)</div>
+    <div class="iphone">
+      <div class="dynamic-island"></div>
+      <div class="screen-body">
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <span style="font-size:12px; font-weight:600;">5G</span>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div class="nav-bar-inline">
+          <button class="back-btn">
+            <span class="back-chevron">&#8249;</span>
+            <span>Back</span>
+          </button>
+          <span class="nav-title-inline">User Details</span>
+        </div>
+        <div class="screen-content">
+          <div class="profile-header">
+            <div class="avatar-large" style="background: linear-gradient(135deg, #a371f7, #8957e5);">
+              <span>P</span>
+            </div>
+            <div class="profile-name" style="color:var(--text-secondary); font-weight:400; font-size:15px; margin-top:12px;">Name not available</div>
+            <div class="profile-login" style="font-size:22px; font-weight:700; color:var(--text-primary); margin-top:4px;">@pjhyett</div>
+
+            <div class="stats-row" style="opacity:0.5;">
+              <div class="stat-item">
+                <div class="stat-icon-row"><span class="stat-icon">&#128101;</span></div>
+                <div class="stat-number">--</div>
+                <div class="stat-label">Followers</div>
+              </div>
+              <div class="stats-divider"></div>
+              <div class="stat-item">
+                <div class="stat-icon-row"><span class="stat-icon">&#128100;+</span></div>
+                <div class="stat-number">--</div>
+                <div class="stat-label">Following</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <div style="padding: 24px 0; text-align: center;">
+              <div style="font-size: 13px; color: var(--text-tertiary); line-height: 1.5;">
+                Detailed information unavailable offline.<br>
+                Connect to the internet to load full profile.
+              </div>
+            </div>
+          </div>
+
+          <div class="github-btn-container">
+            <button class="github-btn">
+              <span class="gh-icon">
+                <svg viewBox="0 0 16 16" version="1.1" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+              </span>
+              View on GitHub
+            </button>
+          </div>
+        </div>
+        <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="annotation-title">Design Notes</div>
+      <div class="annotation-text">
+        Shows cached list data when detail API fails. Login from list data replaces name.
+        Stats show "--" with 0.5 opacity. Offline message in tertiary color.
+        GitHub button still works (URL known from list). Graceful degradation pattern.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let isDark = false;
+
+  function toggleTheme() {
+    isDark = !isDark;
+    document.querySelectorAll('.iphone').forEach(el => {
+      el.classList.toggle('dark', isDark);
+    });
+    document.getElementById('theme-icon').textContent = isDark ? '\u2600' : '\u263E';
+    document.getElementById('theme-label').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+  }
+
+  function showState(state) {
+    const states = ['normal', 'loading', 'error', 'minimal'];
+    states.forEach(s => {
+      const el = document.getElementById('state-' + s);
+      if (el) el.classList.toggle('state-hidden', s !== state);
+    });
+    document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
