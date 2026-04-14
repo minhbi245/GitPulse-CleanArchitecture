@@ -93,6 +93,8 @@ final class PaginationManager: Sendable {
     @MainActor func refresh() async {
         guard !isLoading else { return }
         isLoading = true
+        defer { isLoading = false }
+
         hasMorePages = true
         lastUserId = 0
         loadingSubject.send(.refreshing)
@@ -116,8 +118,6 @@ final class PaginationManager: Sendable {
         } catch {
             loadingSubject.send(.error(error))
         }
-
-        isLoading = false
     }
 
     /// APPEND — fetch next page using last user ID.
@@ -125,6 +125,8 @@ final class PaginationManager: Sendable {
     @MainActor func loadNextPage() async {
         guard !isLoading, hasMorePages else { return }
         isLoading = true
+        defer { isLoading = false }
+
         loadingSubject.send(.loadingMore)
 
         do {
@@ -142,8 +144,6 @@ final class PaginationManager: Sendable {
         } catch {
             loadingSubject.send(.error(error))
         }
-
-        isLoading = false
     }
 
     // MARK: - Private

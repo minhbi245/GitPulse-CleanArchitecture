@@ -33,5 +33,18 @@
 	<string>$(DB_ENCRYPTION_ENABLED)</string>
 	<key>CFBundleDisplayName</key>
 	<string>$(APP_DISPLAY_NAME)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>com.gitpulse</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>gitpulse</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

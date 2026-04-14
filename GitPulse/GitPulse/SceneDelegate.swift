@@ -7,13 +7,14 @@
 
 import UIKit
 
-/// iOS equivalent of Android's MainActivity.onCreate() + setContent { MainNavHost() }
-/// Creates the UIWindow programmatically and sets the root UINavigationController.
-/// In Android, the system creates the Activity from the manifest; here we explicitly
-/// build the window and attach a rootViewController.
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+/// iOS equivalent of Android's `MainActivity.onCreate() + setContent { MainNavHost() }`.
+/// Builds the window, installs a root `UINavigationController`, and hands off
+/// routing to `AppCoordinator`. Deep links are parsed here and forwarded to
+/// the coordinator — equivalent to Android's `navDeepLink` handling inside `NavHost`.
+final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var appCoordinator: AppCoordinator?
 
     func scene(
         _ scene: UIScene,
@@ -23,19 +24,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: windowScene)
-
-        // Temporary root VC — will be replaced by AppCoordinator in Phase 09
-        let rootVC = UIViewController()
-        rootVC.view.backgroundColor = .systemBackground
-        rootVC.title = "GitPulse"
-
-        let navigationController = UINavigationController(rootViewController: rootVC)
+        let navigationController = UINavigationController()
         navigationController.navigationBar.prefersLargeTitles = true
+
+        let coordinator = AppCoordinator(navigationController: navigationController)
+        coordinator.start()
 
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
 
         self.window = window
+        self.appCoordinator = coordinator
+
+        // Cold-launch deep link: app was opened via URL.
+        if let urlContext = connectionOptions.urlContexts.first {
+            coordinator.handleDeepLink(url: urlContext.url)
+        }
+    }
+
+    /// Warm deep link — equivalent to Android `Activity.onNewIntent`.
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        appCoordinator?.handleDeepLink(url: url)
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {

@@ -26,7 +26,16 @@ final class APIClient: @unchecked Sendable {
             let config = URLSessionConfiguration.default
             config.timeoutIntervalForRequest = 30
             config.timeoutIntervalForResource = 60
-            self.session = URLSession(configuration: config)
+
+            // SSL certificate pinning — equivalent to:
+            // OkHttpClient.Builder().certificatePinner(pinner).build()
+            // URLSession retains the delegate strongly for the session's lifetime.
+            let pinningDelegate = SSLPinningDelegate()
+            self.session = URLSession(
+                configuration: config,
+                delegate: pinningDelegate,
+                delegateQueue: nil
+            )
         }
 
     }

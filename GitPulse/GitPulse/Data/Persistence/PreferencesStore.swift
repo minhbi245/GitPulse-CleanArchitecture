@@ -35,7 +35,11 @@ final class PreferencesStore: PreferencesStoreProtocol {
     }
 
     init(service: String = "com.gitpulse.preferences") {
+        // `.whenUnlockedThisDeviceOnly` — data only accessible when device is unlocked
+        // AND never migrated to new devices. Equivalent to Android's
+        // EncryptedSharedPreferences + REQUIRE_DEVICE_UNLOCK.
         self.keychain = Keychain(service: service)
+            .accessibility(.whenUnlockedThisDeviceOnly)
     }
 
     /// Store timestamp — equivalent to: dataStore.edit { prefs -> prefs[KEY] = value }
