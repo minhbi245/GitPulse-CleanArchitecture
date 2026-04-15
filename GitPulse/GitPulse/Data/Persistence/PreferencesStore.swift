@@ -6,14 +6,24 @@
 //
 
 import Foundation
-import KeychainAccess
 
-/// Secure key-value store backed by Keychain.
+/// App-state key-value store backed by `UserDefaults`.
 ///
-/// Keychain is hardware-encrypted and persists across app reinstalls,
-/// making it the appropriate choice for sensitive timestamps and tokens.
-/// `.whenUnlockedThisDeviceOnly` ensures data is accessible only when the
-/// device is unlocked and is never migrated to new devices.
+/// This store holds **non-sensitive cache metadata** (timestamps, pagination
+/// cursor, end-of-list flag). UserDefaults is the right tool because:
+///
+/// - Data is **wiped automatically when the app is uninstalled**, which keeps
+///   cache metadata in lockstep with the CoreData cache (also wiped).
+/// - Fast (in-memory with lazy disk flush) — no I/O overhead per read.
+/// - No encryption cost for data that isn't secret.
+///
+/// Previously this store was backed by Keychain, which survives app uninstall
+/// — that caused a "fresh install → blank screen" bug where stale Keychain
+/// `lastUpdated` timestamps made the offline-first layer think the empty
+/// CoreData cache was still fresh, so no network fetch was triggered.
+///
+/// **For future auth tokens**, introduce a separate `SecureStore` (Keychain)
+/// rather than mixing secrets back into this store.
 protocol PreferencesStoreProtocol {
     func setLastUpdatedUserList(_ timestamp: TimeInterval)
     func getLastUpdatedUserList() -> TimeInterval
@@ -29,7 +39,7 @@ protocol PreferencesStoreProtocol {
 
 final class PreferencesStore: PreferencesStoreProtocol {
 
-    private let keychain: Keychain
+    private let defaults: UserDefaults
 
     private enum Keys {
         static let lastUpdatedUserList = "last_updated_user_list"
@@ -37,56 +47,38 @@ final class PreferencesStore: PreferencesStoreProtocol {
         static let hasMoreUsers = "has_more_users"
     }
 
-    init(service: String = "com.gitpulse.preferences") {
-        self.keychain = Keychain(service: service)
-            .accessibility(.whenUnlockedThisDeviceOnly)
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
     }
 
     func setLastUpdatedUserList(_ timestamp: TimeInterval) {
-        do {
-            try keychain.set(String(timestamp), key: Keys.lastUpdatedUserList)
-        } catch {
-            print("[Keychain] Failed to set lastUpdatedUserList: \(error.localizedDescription)")
-        }
+        defaults.set(timestamp, forKey: Keys.lastUpdatedUserList)
     }
 
-    /// Returns 0 if not yet set.
+    /// Returns 0 if not yet set — `UserDefaults.double(forKey:)` returns 0 for missing keys.
     func getLastUpdatedUserList() -> TimeInterval {
-        guard let value = keychain[Keys.lastUpdatedUserList],
-              let timestamp = TimeInterval(value) else {
-            return 0
-        }
-        return timestamp
+        defaults.double(forKey: Keys.lastUpdatedUserList)
     }
 
     func setLastUserListCursor(_ userId: Int) {
-        do {
-            try keychain.set(String(userId), key: Keys.lastUserListCursor)
-        } catch {
-            print("[Keychain] Failed to set lastUserListCursor: \(error.localizedDescription)")
-        }
+        defaults.set(userId, forKey: Keys.lastUserListCursor)
     }
 
     /// Returns 0 if not yet set — caller treats 0 as "start from the beginning".
     func getLastUserListCursor() -> Int {
-        guard let value = keychain[Keys.lastUserListCursor],
-              let cursor = Int(value) else {
-            return 0
-        }
-        return cursor
+        defaults.integer(forKey: Keys.lastUserListCursor)
     }
 
     func setHasMoreUsers(_ hasMore: Bool) {
-        do {
-            try keychain.set(hasMore ? "1" : "0", key: Keys.hasMoreUsers)
-        } catch {
-            print("[Keychain] Failed to set hasMoreUsers: \(error.localizedDescription)")
-        }
+        defaults.set(hasMore, forKey: Keys.hasMoreUsers)
     }
 
     /// Defaults to `true` so a fresh install attempts pagination.
+    ///
+    /// `UserDefaults.bool(forKey:)` returns `false` for missing keys, but we
+    /// want `true` as the fresh-install default — hence the explicit nil check.
     func getHasMoreUsers() -> Bool {
-        guard let value = keychain[Keys.hasMoreUsers] else { return true }
-        return value == "1"
+        guard defaults.object(forKey: Keys.hasMoreUsers) != nil else { return true }
+        return defaults.bool(forKey: Keys.hasMoreUsers)
     }
 }

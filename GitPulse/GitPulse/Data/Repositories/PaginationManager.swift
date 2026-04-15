@@ -71,12 +71,20 @@ final class PaginationManager: Sendable {
         return elapsed <= Self.cacheTimeout
     }
 
-    /// Initial load — loads from cache first, then refreshes if stale.
+    /// Initial load — loads from cache first, then refreshes if empty or stale.
+    ///
+    /// The empty-cache check is essential: a fresh install has no CoreData
+    /// entries, so without this guard the UI would be blank until the user
+    /// pulled to refresh. (Previously, a stale `lastUpdated` timestamp from
+    /// Keychain — which used to survive uninstall — could also leave `isCacheFresh()`
+    /// returning `true` on a fresh install; the store is now UserDefaults-backed,
+    /// but the empty-check remains as defensive programming.)
     @MainActor func loadInitial() async {
         // Always load cached data first (offline-first).
         loadCachedUsers()
 
-        if !isCacheFresh() {
+        let cacheIsEmpty = usersSubject.value.isEmpty
+        if cacheIsEmpty || !isCacheFresh() {
             await refresh()
         }
     }
