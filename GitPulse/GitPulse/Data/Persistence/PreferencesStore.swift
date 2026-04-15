@@ -17,6 +17,14 @@ import KeychainAccess
 protocol PreferencesStoreProtocol {
     func setLastUpdatedUserList(_ timestamp: TimeInterval)
     func getLastUpdatedUserList() -> TimeInterval
+
+    /// Last fetched user id — pagination cursor for GitHub `since` query.
+    func setLastUserListCursor(_ userId: Int)
+    func getLastUserListCursor() -> Int
+
+    /// Whether more pages are available — persisted so cold launches resume correctly.
+    func setHasMoreUsers(_ hasMore: Bool)
+    func getHasMoreUsers() -> Bool
 }
 
 final class PreferencesStore: PreferencesStoreProtocol {
@@ -25,6 +33,8 @@ final class PreferencesStore: PreferencesStoreProtocol {
 
     private enum Keys {
         static let lastUpdatedUserList = "last_updated_user_list"
+        static let lastUserListCursor = "last_user_list_cursor"
+        static let hasMoreUsers = "has_more_users"
     }
 
     init(service: String = "com.gitpulse.preferences") {
@@ -47,5 +57,36 @@ final class PreferencesStore: PreferencesStoreProtocol {
             return 0
         }
         return timestamp
+    }
+
+    func setLastUserListCursor(_ userId: Int) {
+        do {
+            try keychain.set(String(userId), key: Keys.lastUserListCursor)
+        } catch {
+            print("[Keychain] Failed to set lastUserListCursor: \(error.localizedDescription)")
+        }
+    }
+
+    /// Returns 0 if not yet set — caller treats 0 as "start from the beginning".
+    func getLastUserListCursor() -> Int {
+        guard let value = keychain[Keys.lastUserListCursor],
+              let cursor = Int(value) else {
+            return 0
+        }
+        return cursor
+    }
+
+    func setHasMoreUsers(_ hasMore: Bool) {
+        do {
+            try keychain.set(hasMore ? "1" : "0", key: Keys.hasMoreUsers)
+        } catch {
+            print("[Keychain] Failed to set hasMoreUsers: \(error.localizedDescription)")
+        }
+    }
+
+    /// Defaults to `true` so a fresh install attempts pagination.
+    func getHasMoreUsers() -> Bool {
+        guard let value = keychain[Keys.hasMoreUsers] else { return true }
+        return value == "1"
     }
 }

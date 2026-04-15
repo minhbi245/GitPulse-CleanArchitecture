@@ -15,15 +15,6 @@ final class UserRepositoryImpl: UserRepositoryProtocol {
     private let localDataSource: UserLocalDataSourceProtocol
     private let preferencesStore: PreferencesStoreProtocol
 
-    /// Lazy PaginationManager — created on first access.
-    lazy var paginationManager: PaginationManager = {
-        PaginationManager(
-            userService: userService,
-            localDataSource: localDataSource,
-            preferencesStore: preferencesStore
-        )
-    }()
-
     init(
         userService: UserServiceProtocol,
         localDataSource: UserLocalDataSourceProtocol,
@@ -44,23 +35,29 @@ final class UserRepositoryImpl: UserRepositoryProtocol {
                         promise(.failure(AppError.unknown("Repository deallocated")))
                         return
                     }
-                    let responses = try await self.userService.getUsers(
-                        perPage: perPage, since: since
-                    )
-                    let models = responses.map { response in
-                        UserModel(
-                            id: response.id ?? 0,
-                            username: response.login ?? "",
-                            avatarUrl: response.avatarUrl ?? "",
-                            url: response.htmlUrl ?? ""
-                        )
-                    }
+                    let models = try await self.getUsersAsync(perPage: perPage, since: since)
                     promise(.success(models))
                 } catch {
-                    promise(.failure(NetworkErrorMapper.mapError(error)))
+                    promise(.failure(error))
                 }
             }
         }.eraseToAnyPublisher()
+    }
+
+    func getUsersAsync(perPage: Int, since: Int) async throws -> [UserModel] {
+        do {
+            let responses = try await userService.getUsers(perPage: perPage, since: since)
+            return responses.map { response in
+                UserModel(
+                    id: response.id ?? 0,
+                    username: response.login ?? "",
+                    avatarUrl: response.avatarUrl ?? "",
+                    url: response.htmlUrl ?? ""
+                )
+            }
+        } catch {
+            throw NetworkErrorMapper.mapError(error)
+        }
     }
 
     func getUserDetails(username: String) -> AnyPublisher<UserDetailsModel, Error> {

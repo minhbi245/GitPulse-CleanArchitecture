@@ -11,8 +11,9 @@ import Combine
 final class UserListViewModelTests: XCTestCase {
 
     private func makeViewModel() -> UserListViewModel {
+        let useCase = GetUserPagingUseCase(repository: MockUserRepository())
         let manager = PaginationManager(
-            userService: MockUserService(),
+            getUserPagingUseCase: useCase,
             localDataSource: MockUserLocalDataSource(),
             preferencesStore: MockPreferencesStore()
         )

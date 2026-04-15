@@ -22,6 +22,11 @@ protocol UserRepositoryProtocol {
     /// - Returns: Publisher emitting array of users for the requested page
     func getUsers(perPage: Int, since: Int) -> AnyPublisher<[UserModel], Error>
 
+    /// Async variant used by `PaginationManager` so the offline-first
+    /// orchestrator can route through the domain abstraction without
+    /// bridging Combine → async on every call.
+    func getUsersAsync(perPage: Int, since: Int) async throws -> [UserModel]
+
     /// Fetch detailed info for a specific user.
     func getUserDetails(username: String) -> AnyPublisher<UserDetailsModel, Error>
 

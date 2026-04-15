@@ -37,17 +37,6 @@ extension Container {
 
     // MARK: - Repositories
 
-    /// PaginationManager singleton — manages offline-first pagination state for the user list.
-    var paginationManager: Factory<PaginationManager> {
-        self {
-            PaginationManager(
-                userService: self.userService(),
-                localDataSource: self.userLocalDataSource(),
-                preferencesStore: self.preferencesStore()
-            )
-        }.singleton
-    }
-
     var userRepository: Factory<UserRepositoryProtocol> {
         self {
             UserRepositoryImpl(
@@ -61,10 +50,24 @@ extension Container {
     // MARK: - Use Cases
 
     var getUserPagingUseCase: Factory<GetUserPagingUseCase> {
-        self { GetUserPagingUseCase(repository: self.userRepository()) }
+        self { GetUserPagingUseCase(repository: self.userRepository()) }.singleton
     }
 
     var getUserDetailsUseCase: Factory<GetUserDetailsUseCase> {
         self { GetUserDetailsUseCase(repository: self.userRepository()) }
+    }
+
+    // MARK: - Coordinators
+
+    /// PaginationManager singleton — manages offline-first pagination state for the user list.
+    /// Routes network fetches through `GetUserPagingUseCase` so the domain layer is never bypassed.
+    var paginationManager: Factory<PaginationManager> {
+        self {
+            PaginationManager(
+                getUserPagingUseCase: self.getUserPagingUseCase(),
+                localDataSource: self.userLocalDataSource(),
+                preferencesStore: self.preferencesStore()
+            )
+        }.singleton
     }
 }

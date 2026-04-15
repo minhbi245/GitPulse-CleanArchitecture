@@ -31,6 +31,16 @@ final class MockUserRepository: UserRepositoryProtocol {
         return getUsersResult.publisher.eraseToAnyPublisher()
     }
 
+    func getUsersAsync(perPage: Int, since: Int) async throws -> [UserModel] {
+        getUsersCallCount += 1
+        lastGetUsersPerPage = perPage
+        lastGetUsersSince = since
+        switch getUsersResult {
+        case .success(let users): return users
+        case .failure(let error): throw error
+        }
+    }
+
     func getUserDetails(username: String) -> AnyPublisher<UserDetailsModel, Error> {
         getUserDetailsCallCount += 1
         lastGetDetailsUsername = username

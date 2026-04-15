@@ -37,6 +37,27 @@ enum UserResponseMapper {
         responses.map { mapToLocal($0) }
     }
 
+    /// UserModel -> tuple for Core Data upsert.
+    /// Used by `PaginationManager` which receives domain models from the use case
+    /// rather than raw DTOs.
+    static func mapToLocal(
+        _ model: UserModel
+    ) -> (id: Int, username: String, avatarUrl: String, url: String) {
+        return (
+            id: model.id,
+            username: model.username,
+            avatarUrl: model.avatarUrl,
+            url: model.url
+        )
+    }
+
+    /// [UserModel] -> [tuple] batch mapping.
+    static func mapToLocalList(
+        _ models: [UserModel]
+    ) -> [(id: Int, username: String, avatarUrl: String, url: String)] {
+        models.map { mapToLocal($0) }
+    }
+
     /// UserEntity -> UserModel (domain model).
     static func mapToDomain(_ entity: UserEntity) -> UserModel {
         UserModel(

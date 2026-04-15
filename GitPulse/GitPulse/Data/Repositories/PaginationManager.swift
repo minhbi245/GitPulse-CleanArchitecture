@@ -18,7 +18,7 @@ final class PaginationManager: Sendable {
 
     // MARK: - Dependencies
 
-    private let userService: UserServiceProtocol
+    private let getUserPagingUseCase: GetUserPagingUseCase
     private let localDataSource: UserLocalDataSourceProtocol
     private let preferencesStore: PreferencesStoreProtocol
 
@@ -30,11 +30,12 @@ final class PaginationManager: Sendable {
     /// Loading state for UI.
     @MainActor let loadingSubject = CurrentValueSubject<PaginationLoadState, Never>(.idle)
 
-    /// Whether more pages are available.
-    @MainActor private(set) var hasMorePages = true
+    /// Whether more pages are available — restored from PreferencesStore so
+    /// cold launches resume the correct state.
+    @MainActor private(set) var hasMorePages: Bool
 
-    /// Last user ID for append queries.
-    @MainActor private var lastUserId: Int = 0
+    /// Last user ID for append queries — persisted across cold launches.
+    @MainActor private var lastUserId: Int
 
     /// Prevent concurrent loads.
     @MainActor private var isLoading = false
@@ -49,13 +50,16 @@ final class PaginationManager: Sendable {
     // MARK: - Init
 
     init(
-        userService: UserServiceProtocol,
+        getUserPagingUseCase: GetUserPagingUseCase,
         localDataSource: UserLocalDataSourceProtocol,
         preferencesStore: PreferencesStoreProtocol
     ) {
-        self.userService = userService
+        self.getUserPagingUseCase = getUserPagingUseCase
         self.localDataSource = localDataSource
         self.preferencesStore = preferencesStore
+        // Restore pagination state from persistent store.
+        self.lastUserId = preferencesStore.getLastUserListCursor()
+        self.hasMorePages = preferencesStore.getHasMoreUsers()
     }
 
     // MARK: - Public API
@@ -77,7 +81,7 @@ final class PaginationManager: Sendable {
         }
     }
 
-    /// REFRESH — clear cache, fetch first page from network.
+    /// REFRESH — clear cache, fetch first page via the use case.
     @MainActor func refresh() async {
         guard !isLoading else { return }
         isLoading = true
@@ -88,19 +92,19 @@ final class PaginationManager: Sendable {
         loadingSubject.send(.refreshing)
 
         do {
-            let responses = try await userService.getUsers(
+            let models = try await getUserPagingUseCase(
                 perPage: Self.pageSize,
                 since: 0
             )
 
-            let localUsers = UserResponseMapper.mapToLocalList(responses)
+            let localUsers = UserResponseMapper.mapToLocalList(models)
             try localDataSource.upsertAndDeleteAll(needToDelete: true, users: localUsers)
 
             preferencesStore.setLastUpdatedUserList(Date().timeIntervalSince1970)
+            hasMorePages = models.count >= Self.pageSize
+            preferencesStore.setHasMoreUsers(hasMorePages)
 
-            hasMorePages = responses.count >= Self.pageSize
-
-            // Reload from cache to get mapped domain models.
+            // Reload from cache to get the canonical ordered list.
             loadCachedUsers()
             loadingSubject.send(.idle)
         } catch {
@@ -117,15 +121,16 @@ final class PaginationManager: Sendable {
         loadingSubject.send(.loadingMore)
 
         do {
-            let responses = try await userService.getUsers(
+            let models = try await getUserPagingUseCase(
                 perPage: Self.pageSize,
                 since: lastUserId
             )
 
-            let localUsers = UserResponseMapper.mapToLocalList(responses)
+            let localUsers = UserResponseMapper.mapToLocalList(models)
             try localDataSource.upsertAndDeleteAll(needToDelete: false, users: localUsers)
 
-            hasMorePages = responses.count >= Self.pageSize
+            hasMorePages = models.count >= Self.pageSize
+            preferencesStore.setHasMoreUsers(hasMorePages)
             loadCachedUsers()
             loadingSubject.send(.idle)
         } catch {
@@ -141,6 +146,7 @@ final class PaginationManager: Sendable {
             let models = UserResponseMapper.mapToDomainList(entities)
             if let lastUser = models.last {
                 lastUserId = lastUser.id
+                preferencesStore.setLastUserListCursor(lastUser.id)
             }
             usersSubject.send(models)
         } catch {
